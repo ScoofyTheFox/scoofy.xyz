@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- SETTINGS: edit ./assets/settings/site.json and ./assets/settings/pages/assets.json -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoofy.xyz | Assets</title>
+  <meta name="description" content="Asset guide and media folders for Scoofyx.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="./assets/images/scoofyx-site-logo.png">
+  <link rel="apple-touch-icon" href="./assets/images/scoofyx-site-logo.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="assets" data-theme="dark" data-settings="./assets/settings/site.json">
+  <div class="aero-backdrop" aria-hidden="true"><div class="aero-bubble bubble-a"></div><div class="aero-bubble bubble-b"></div><div class="aero-bubble bubble-c"></div></div>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="./"><span class="brand-mark"><img src="./assets/images/scoofyx-site-logo.png" alt="Scoofyx site logo"></span><span class="brand-text"><strong>Scoofyx</strong><span>scoofyx / assets</span></span></a>
+      <nav class="top-nav" aria-label="Primary navigation">
+        <a href="./index.html" data-nav="home">Blog</a><a href="./docs.html" data-nav="docs">Docs</a><a href="./fursona.html" data-nav="fursona">Fursona</a><a href="./gallery.html" data-nav="gallery">Gallery</a><a href="./live.html" data-nav="live">Live</a><a href="./furries.html" data-nav="furries">Furries</a><a href="./links.html" data-nav="links">Links</a>
+      </nav>
+    </header>
+    <main class="page-stack">
+      <section class="page-intro reveal">
+        <article class="page-panel">
+          <p class="eyebrow" data-setting="intro.eyebrow">Route /assets/</p>
+          <h3 data-setting="intro.title">Media folders and setup notes for the site.</h3>
+          <p data-setting="intro.text">Use this page as the quick reference for what goes where when you keep expanding the site.</p>
+        </article>
+        <article class="page-panel">
+          <p class="eyebrow">Folders</p>
+          <ul class="fact-list">
+            <li>`assets/images/` for art, renders, logos, drawings, and memes</li>
+            <li>`assets/gifs/` for Scoofyx gifverse loops</li>
+            <li>`assets/music/` for looping audio tracks and `tracks.json`</li>
+            <li>`assets/live/` for the live tab JSON and live images</li>
+            <li>`assets/settings/` for shared site settings</li>
+          </ul>
+        </article>
+      </section>
+      <section class="doc-grid reveal">
+        <article class="page-panel">
+          <p class="post-kicker">Music</p>
+          <h3>Hidden background music setup</h3>
+          <p>Drop an mp3 into `assets/music/` and add it to `tracks.json`. The site now plays music in the background with automatic track changes, fades, and a subtle echo effect, without showing a visible player box.</p>
+        </article>
+        <article class="page-panel">
+          <p class="post-kicker">Live tab</p>
+          <h3>GitHub-editable update feed</h3>
+          <p>Edit `assets/live/live.json` to change the live page whenever you want. Add images in `assets/live/images/` and point to them from the JSON file.</p>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="./script.js"></script>
+</body>
+</html>

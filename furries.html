@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- SETTINGS: edit ./assets/settings/site.json and ./assets/settings/pages/furries.json -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoofy.xyz | Furries</title>
+  <meta name="description" content="A themed page about furry foxes, shark furries, and hybrid creature vibes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="./assets/images/scoofyx-site-logo.png">
+  <link rel="apple-touch-icon" href="./assets/images/scoofyx-site-logo.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="furries" data-theme="dark" data-settings="./assets/settings/site.json">
+  <div class="aero-backdrop" aria-hidden="true"><div class="aero-bubble bubble-a"></div><div class="aero-bubble bubble-b"></div><div class="aero-bubble bubble-c"></div></div>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="./"><span class="brand-mark"><img src="./assets/images/scoofyx-site-logo.png" alt="Scoofyx site logo"></span><span class="brand-text"><strong>Scoofy</strong><span>scoofy.xyz / furries</span></span></a>
+      <nav class="top-nav" aria-label="Primary navigation">
+        <a href="./index.html" data-nav="home">Blog</a><a href="./docs.html" data-nav="docs">Docs</a><a href="./fursona.html" data-nav="fursona">Fursona</a><a href="./gallery.html" data-nav="gallery">Gallery</a><a href="./live.html" data-nav="live">Live</a><a href="./furries.html" data-nav="furries">Furries</a><a href="./links.html" data-nav="links">Links</a>
+      </nav>
+    </header>
+    <main class="page-stack">
+      <section class="furry-banner reveal">
+        <article class="page-panel furry-banner-card">
+          <p class="eyebrow" data-setting="banner.eyebrow">Community banner</p>
+          <h3 data-setting="banner.title">The furry scene is colorful, loud, social, creative, and way bigger than one style.</h3>
+          <p data-setting="banner.text">
+            This convention group shot is the visual anchor for the page now, and it fits the
+            community side of the tab way better than the old placeholder state.
+          </p>
+          <div class="furry-banner-frame">
+            <img src="./assets/images/furry-banner.webp" alt="Furry community banner">
+          </div>
+        </article>
+      </section>
+      <section class="page-intro reveal">
+        <article class="page-panel">
+          <p class="eyebrow" data-setting="intro.eyebrow">Route /furries/</p>
+          <h3 data-setting="intro.title">Fox furries, shark furries, and why hybrids hit so hard.</h3>
+          <p data-setting="intro.text">This page is less about direct profile info and more about the creature side of the site. It works like a themed note page or mini essay collection.</p>
+        </article>
+        <article class="page-panel">
+          <p class="eyebrow">Creature keywords</p>
+          <div class="tag-row"><span class="tag">Fox</span><span class="tag">Shark</span><span class="tag">Hybrid</span><span class="tag">Sona design</span></div>
+        </article>
+      </section>
+      <section class="topic-grid reveal">
+        <article class="topic-card"><p class="post-kicker">Fox energy</p><h3>Why fox sonas are so popular</h3><p>Foxes carry personality fast. They can read as clever, cute, mischievous, or soft depending on the design.</p></article>
+        <article class="topic-card"><p class="post-kicker">Shark energy</p><h3>What shark traits add to a furry design</h3><p>Shark details introduce danger, shape contrast, and a cleaner aquatic edge that stands out immediately.</p></article>
+        <article class="topic-card"><p class="post-kicker">Hybrid appeal</p><h3>Why fox-shark combinations feel memorable</h3><p>You get approachable familiarity from the fox and weird cool factor from the shark at the same time.</p></article>
+        <article class="topic-card"><p class="post-kicker">Site use</p><h3>How this page can grow later</h3><p>It can hold essays, inspirations, creature moodboards, or even favorite species design notes.</p></article>
+      </section>
+    </main>
+  </div>
+  <script src="./script.js"></script>
+</body>
+</html>
