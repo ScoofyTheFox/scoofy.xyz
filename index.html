@@ -1,120 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scoofy.xyz | Glossy Blog</title>
-    <style>
-        :root {
-            --glass: rgba(255, 255, 255, 0.1);
-            --border: rgba(255, 255, 255, 0.2);
-            --accent: #00d4ff;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135.2deg, #0f172a 0%, #1e293b 100%);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Glossy Navigation */
-        nav {
-            width: 90%;
-            max-width: 1000px;
-            margin-top: 20px;
-            padding: 20px;
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            display: flex;
-            justify-content: space-between;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .logo { font-weight: bold; font-size: 1.5rem; letter-spacing: 2px; color: var(--accent); }
-
-        /* Main Container */
-        .container {
-            width: 90%;
-            max-width: 800px;
-            margin-top: 50px;
-        }
-
-        /* Glossy Post Card */
-        .post-card {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            border-radius: 25px;
-            padding: 30px;
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* The Glossy Reflection Effect */
-        .post-card::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
-            transform: rotate(45deg);
-            transition: 0.5s;
-        }
-
-        .post-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-        }
-
-        .post-card:hover::before {
-            left: 100%;
-        }
-
-        h1 { color: var(--accent); margin-top: 0; }
-        p { line-height: 1.6; color: #cbd5e1; }
-
-        .tag {
-            background: var(--accent);
-            color: #0f172a;
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoofy.xyz</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <nav>
-        <div class="logo">SCOOFY.XYZ</div>
-        <div>Blog • Projects • Contact</div>
-    </nav>
-
-    <div class="container">
-        <div class="post-card">
-            <span class="tag">LATEST UPDATE</span>
-            <h1>Welcome to the New Site</h1>
-            <p>I finally got the domain scoofy.xyz working with GitHub Pages! This site uses a glossy glassmorphism design with CSS backdrop filters.</p>
-        </div>
-
-        <div class="post-card">
-            <span class="tag">DESIGN</span>
-            <h1>The Glossy Aesthetic</h1>
-            <p>To get this look, we use semi-transparent backgrounds and high levels of "backdrop-filter: blur". It makes the UI feel like premium hardware.</p>
-        </div>
+<nav class="glass">
+  <div class="logo">SCOOFY.XYZ</div>
+  <div class="nav-links">
+    <a href="index.html">home</a>
+    <a href="docs.html">docs</a>
+    <a href="projects.html">projects</a>
+    <a href="about.html">about</a>
+    <a href="contact.html">contact</a>
+  </div>
+</nav>
+<div class="hero">
+  <h1>hey, i'm scoofy</h1>
+  <p>building stuff on the internet — one commit at a time</p>
+</div>
+<div class="posts">
+  <div class="card">
+    <span class="tag blue">LATEST</span>
+    <h2>Finally got scoofy.xyz working</h2>
+    <p>Set up GitHub Pages with a custom Namecheap domain. Dealt with DNS propagation, CNAME typos, and HTTPS certs — but it's live.</p>
+    <div class="card-footer">
+      <span class="date">April 2026</span>
+      <span class="more">read more →</span>
     </div>
-
+  </div>
+  <div class="card">
+    <span class="tag purple">PROJECT</span>
+    <h2>What I'm working on</h2>
+    <p>Drop in a description of your current project here — a game, tool, script, whatever you're building.</p>
+    <div class="card-footer">
+      <span class="date">Ongoing</span>
+      <span class="more">view project →</span>
+    </div>
+  </div>
+  <div class="card">
+    <span class="tag green">ABOUT</span>
+    <h2>About this site</h2>
+    <p>Plain HTML + CSS on GitHub Pages. No frameworks, no build tools — just files and vibes.</p>
+    <div class="card-footer">
+      <span class="date">Forever ago</span>
+      <span class="more">learn more →</span>
+    </div>
+  </div>
+</div>
+<div class="socials">
+  <a class="social-btn" href="https://github.com/ScoofyTheFox">GitHub</a>
+  <a class="social-btn" href="#">Twitter</a>
+  <a class="social-btn" href="#">Discord</a>
+</div>
 </body>
 </html>
