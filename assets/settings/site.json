@@ -1,0 +1,25 @@
+{
+  "music": {
+    "playlist": "./assets/music/tracks.json",
+    "defaultVolume": 0.42,
+    "crossfadeMs": 1800,
+    "echo": {
+      "delay": 0.21,
+      "feedback": 0.18,
+      "mix": 0.12
+    }
+  },
+  "live": {
+    "source": "./assets/live/live.json"
+  },
+  "pages": {
+    "home": "./assets/settings/pages/home.json",
+    "docs": "./assets/settings/pages/docs.json",
+    "fursona": "./assets/settings/pages/fursona.json",
+    "gallery": "./assets/settings/pages/gallery.json",
+    "live": "./assets/settings/pages/live.json",
+    "furries": "./assets/settings/pages/furries.json",
+    "links": "./assets/settings/pages/links.json",
+    "assets": "./assets/settings/pages/assets.json"
+  }
+}
