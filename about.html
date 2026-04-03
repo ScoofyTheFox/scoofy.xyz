@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABOUT — SCOOFY.XYZ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="cursor-dot" id="dot"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">SCOOFY<span>.XYZ</span></a>
+  <div class="nav-links">
+    <a href="index.html">home</a>
+    <a href="projects.html">projects</a>
+    <a href="game.html">game</a>
+    <a href="docs.html">docs</a>
+    <a href="about.html">about</a>
+    <a href="contact.html">contact</a>
+  </div>
+  <div class="nav-status"><div class="status-dot"></div>ONLINE</div>
+</nav>
+
+<div style="padding-top:80px;">
+<section style="max-width:800px;">
+
+  <div class="section-label">identity file</div>
+  <div class="section-title">ABOUT <em>SCOOFY</em></div>
+
+  <!-- PROFILE CARD -->
+  <div class="card" style="display:flex;gap:32px;align-items:center;margin-bottom:24px;background:linear-gradient(135deg,rgba(0,200,255,0.04),rgba(139,92,246,0.04));">
+    <div class="card-corner"></div>
+    <div style="width:90px;height:90px;border-radius:50%;border:2px solid var(--cyan);display:flex;align-items:center;justify-content:center;flex-shrink:0;background:radial-gradient(circle at 40% 35%,rgba(0,200,255,0.2),rgba(139,92,246,0.2),transparent);">
+      <span style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--cyan);">S</span>
+    </div>
+    <div>
+      <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--text-bright);letter-spacing:3px;">SCOOFY</div>
+      <div style="font-family:var(--font-mono);font-size:12px;color:var(--purple);letter-spacing:2px;margin-top:4px;">BUILDER · CREATOR · GAMER</div>
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);margin-top:8px;">NODE_STATUS: <span style="color:var(--green)">ONLINE</span></div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card">
+      <div class="card-corner"></div>
+      <span class="card-tag tag-cyan">BIO.TXT</span>
+      <p>hey, i'm scoofy. i build things on the internet — games, tools, weird experiments. mostly for fun, sometimes because i needed it myself. always vibing.</p>
+    </div>
+    <div class="card">
+      <div class="card-corner"></div>
+      <span class="card-tag tag-purple">STACK.LOG</span>
+      <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);line-height:2.2;">
+        <div><span style="color:var(--cyan)">●</span> HTML / CSS / JS</div>
+        <div><span style="color:var(--cyan)">●</span> Three.js</div>
+        <div><span style="color:var(--cyan)">●</span> GitHub Pages</div>
+        <div><span style="color:var(--cyan)">●</span> whatever works</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-corner"></div>
+    <span class="card-tag tag-gold">INTERESTS.DAT</span>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">
+      <span style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border:1px solid rgba(0,200,255,0.3);color:var(--cyan);background:rgba(0,200,255,0.07);">game dev</span>
+      <span style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border:1px solid rgba(139,92,246,0.3);color:var(--purple);background:rgba(139,92,246,0.07);">roblox</span>
+      <span style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border:1px solid rgba(0,255,136,0.3);color:var(--green);background:rgba(0,255,136,0.07);">content creation</span>
+      <span style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border:1px solid rgba(245,158,11,0.3);color:var(--gold);background:rgba(245,158,11,0.07);">3D graphics</span>
+      <span style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border:1px solid rgba(255,51,102,0.3);color:var(--red);background:rgba(255,51,102,0.07);">weird projects</span>
+      <span style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border:1px solid rgba(0,200,255,0.3);color:var(--cyan);background:rgba(0,200,255,0.07);">web stuff</span>
+    </div>
+  </div>
+
+</section>
+</div>
+
+<footer>
+  <div style="font-family:var(--font-display);font-size:14px;color:var(--cyan);letter-spacing:4px;margin-bottom:12px">SCOOFY.XYZ</div>
+  <div>BUILT WITH &lt;/&gt; AND VIBES — <a href="https://github.com/ScoofyTheFox">GITHUB</a></div>
+</footer>
+
+<script>
+const dot=document.getElementById('dot'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function a(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
+</script>
+</body>
+</html>

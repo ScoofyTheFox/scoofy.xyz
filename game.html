@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOID RUNNER — SCOOFY.XYZ</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<div class="cursor-dot" id="dot"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">SCOOFY<span>.XYZ</span></a>
+  <div class="nav-links">
+    <a href="index.html">home</a>
+    <a href="projects.html">projects</a>
+    <a href="game.html">game</a>
+    <a href="docs.html">docs</a>
+    <a href="about.html">about</a>
+    <a href="contact.html">contact</a>
+  </div>
+  <div class="nav-status"><div class="status-dot"></div>ONLINE</div>
+</nav>
+
+<div style="padding-top:80px;min-height:100vh;">
+<section style="max-width:1200px;margin:0 auto;padding:60px 40px;">
+
+  <div class="section-label">arcade node</div>
+  <div class="section-title">VOID <em>RUNNER</em></div>
+
+  <div style="display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start;">
+
+    <!-- GAME COLUMN -->
+    <div>
+      <div class="game-hud">
+        <div class="hud-stat"><div class="hud-label">score</div><div class="hud-val" id="hud-score">0</div></div>
+        <div class="hud-stat"><div class="hud-label">level</div><div class="hud-val" id="hud-level">1</div></div>
+        <div class="hud-stat"><div class="hud-label">lives</div><div class="hud-val red" id="hud-lives">♦♦♦</div></div>
+        <div class="hud-stat"><div class="hud-label">hi-score</div><div class="hud-val" id="hud-hi">0</div></div>
+      </div>
+      <canvas id="game-canvas" height="480"></canvas>
+      <div class="game-controls">
+        <button class="btn-primary" id="btn-start" onclick="startGame()">start game</button>
+        <button class="btn-secondary" onclick="pauseGame()">pause</button>
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);align-self:center">← → move  |  SPACE shoot</span>
+      </div>
+
+      <div style="margin-top:24px;" class="terminal">
+        <div class="terminal-header">
+          <div class="t-dot" style="background:#ff5f56"></div>
+          <div class="t-dot" style="background:#ffbd2e"></div>
+          <div class="t-dot" style="background:#27c93f"></div>
+          <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);margin-left:8px">game_log.exe</span>
+        </div>
+        <div class="terminal-body" id="game-log" style="height:100px;overflow-y:auto;">
+          <div class="t-line">void runner initialized</div>
+          <div class="t-line t-dim">// press start to enter the void</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEADERBOARD COLUMN -->
+    <div>
+      <div class="leaderboard-panel">
+        <div class="leaderboard-header">
+          <div class="lb-title">LEADERBOARD</div>
+          <div class="lb-live"><div class="status-dot"></div>GLOBAL</div>
+        </div>
+        <table class="leaderboard-table">
+          <thead><tr>
+            <th>#</th><th>player</th><th>score</th><th>wave</th>
+          </tr></thead>
+          <tbody id="lb-body"></tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:16px;" class="card">
+        <div class="card-corner"></div>
+        <span class="card-tag tag-cyan">SUBMIT SCORE</span>
+        <p style="font-size:13px;margin-bottom:14px;color:var(--text-dim)">Beat a high score? Enter your name to claim your spot.</p>
+        <div class="score-submit">
+          <input class="score-input" id="player-name" placeholder="enter callsign..." maxlength="12">
+          <button class="btn-primary" onclick="submitScore()" style="white-space:nowrap;padding:10px 20px;font-size:9px">submit</button>
+        </div>
+        <div id="submit-msg" style="font-family:var(--font-mono);font-size:11px;color:var(--green);margin-top:10px;min-height:20px;"></div>
+      </div>
+
+      <div style="margin-top:16px;" class="card">
+        <div class="card-corner"></div>
+        <span class="card-tag tag-purple">HOW TO PLAY</span>
+        <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);line-height:2.2;">
+          <div><span style="color:var(--cyan)">← →</span> — move ship</div>
+          <div><span style="color:var(--cyan)">SPACE</span> — fire laser</div>
+          <div><span style="color:var(--cyan)">P</span> — pause game</div>
+          <div style="border-top:1px solid var(--border);padding-top:10px;margin-top:6px;">
+            <div><span style="color:var(--gold)">★</span> destroy asteroids for points</div>
+            <div><span style="color:var(--green)">◆</span> collect energy cores</div>
+            <div><span style="color:var(--red)">!</span> avoid red asteroids</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<footer>
+  <div style="font-family:var(--font-display);font-size:14px;color:var(--cyan);letter-spacing:4px;margin-bottom:12px">SCOOFY.XYZ</div>
+  <div>BUILT WITH &lt;/&gt; AND VIBES — <a href="https://github.com/ScoofyTheFox">GITHUB</a></div>
+</footer>
+
+<script>
+// CURSOR
+const dot = document.getElementById('dot');
+const ring = document.getElementById('ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; });
+(function animRing(){ rx+=(mx-rx)*0.15; ry+=(my-ry)*0.15; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
+
+// LEADERBOARD (persisted in localStorage as shared simulation)
+const LB_KEY = 'scoofy_lb_v2';
+const DEFAULT_LB = [
+  {name:'VOIDLORD', score:98200, wave:31},
+  {name:'NXCRASH', score:74500, wave:24},
+  {name:'PIXL', score:61000, wave:20},
+  {name:'ZEROK', score:48300, wave:16},
+  {name:'SCOOFYFOX', score:41100, wave:14},
+  {name:'XRAY', score:29900, wave:10},
+  {name:'GHOST', score:18200, wave:7},
+  {name:'ANON', score:9800, wave:4},
+];
+function getLB() { try { return JSON.parse(localStorage.getItem(LB_KEY)) || DEFAULT_LB; } catch(e){ return DEFAULT_LB; } }
+function saveLB(lb) { try { localStorage.setItem(LB_KEY, JSON.stringify(lb)); } catch(e){} }
+function renderLB() {
+  const lb = getLB().sort((a,b)=>b.score-a.score).slice(0,10);
+  const body = document.getElementById('lb-body');
+  body.innerHTML = '';
+  lb.forEach((e,i) => {
+    const tr = document.createElement('tr');
+    tr.className = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
+    if(e.name==='YOU') tr.className='rank-you';
+    tr.innerHTML = `<td class="rank-num">${i+1}</td><td>${e.name}</td><td>${e.score.toLocaleString()}</td><td>${e.wave}</td>`;
+    body.appendChild(tr);
+  });
+  const best = lb[0] ? lb[0].score : 0;
+  document.getElementById('hud-hi').textContent = best.toLocaleString();
+}
+renderLB();
+
+function submitScore() {
+  const name = (document.getElementById('player-name').value.trim().toUpperCase() || 'ANON').substring(0,12);
+  if(gameScore <= 0) { document.getElementById('submit-msg').textContent = '// play first!'; return; }
+  const lb = getLB();
+  lb.push({name, score: gameScore, wave: gameLevel});
+  lb.sort((a,b)=>b.score-a.score);
+  saveLB(lb.slice(0,20));
+  renderLB();
+  document.getElementById('submit-msg').textContent = `// ${name} added to the void!`;
+  setTimeout(() => document.getElementById('submit-msg').textContent='', 3000);
+}
+
+// GAME LOG
+function log(msg, type='normal') {
+  const el = document.getElementById('game-log');
+  const d = document.createElement('div');
+  d.className = type==='dim' ? 't-line t-dim' : 't-line';
+  d.textContent = msg;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+
+// THREE.JS GAME
+const canvas = document.getElementById('game-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(0x000408, 1);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / 480, 0.1, 200);
+camera.position.set(0, 6, 14);
+camera.lookAt(0, 0, 0);
+
+function resizeRenderer() {
+  const w = canvas.clientWidth;
+  renderer.setSize(w, 480, false);
+  camera.aspect = w / 480;
+  camera.updateProjectionMatrix();
+}
+resizeRenderer();
+window.addEventListener('resize', resizeRenderer);
+
+// LIGHTING
+scene.add(new THREE.AmbientLight(0x0a1520, 2));
+const dirLight = new THREE.DirectionalLight(0x00c8ff, 1.5);
+dirLight.position.set(0, 10, 5);
+scene.add(dirLight);
+const rimLight = new THREE.PointLight(0x8b5cf6, 2, 30);
+rimLight.position.set(-8, 4, 0);
+scene.add(rimLight);
+
+// STARFIELD
+const starGeo = new THREE.BufferGeometry();
+const starVerts = [];
+for(let i=0;i<1500;i++) { starVerts.push((Math.random()-0.5)*120,(Math.random()-0.5)*80,(Math.random()*-100)); }
+starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starVerts,3));
+const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({color:0x88aacc,size:0.15}));
+scene.add(stars);
+
+// GRID FLOOR
+const gridHelper = new THREE.GridHelper(30, 30, 0x00c8ff, 0x001428);
+gridHelper.position.y = -2;
+scene.add(gridHelper);
+
+// SHIP
+function makeShip() {
+  const g = new THREE.Group();
+  const bodyGeo = new THREE.ConeGeometry(0.4, 1.2, 6);
+  const bodyMat = new THREE.MeshPhongMaterial({ color: 0x00c8ff, emissive: 0x002233, shininess: 120, specular: 0x00c8ff });
+  const body = new THREE.Mesh(bodyGeo, bodyMat);
+  body.rotation.z = Math.PI;
+  g.add(body);
+  const wingGeo = new THREE.BoxGeometry(1.4, 0.08, 0.5);
+  const wingMat = new THREE.MeshPhongMaterial({ color: 0x0088aa, emissive: 0x001122 });
+  const wing = new THREE.Mesh(wingGeo, wingMat);
+  wing.position.y = 0.3;
+  g.add(wing);
+  const engineGeo = new THREE.CylinderGeometry(0.15, 0.25, 0.3, 8);
+  const engineMat = new THREE.MeshPhongMaterial({ color: 0x8b5cf6, emissive: 0x3b1c8c });
+  [-0.45, 0.45].forEach(x => {
+    const eng = new THREE.Mesh(engineGeo, engineMat);
+    eng.position.set(x, 0.45, 0);
+    g.add(eng);
+  });
+  return g;
+}
+const ship = makeShip();
+ship.position.set(0, -0.5, 4);
+scene.add(ship);
+
+// ENGINE GLOW
+const glowGeo = new THREE.SphereGeometry(0.3, 8, 8);
+const glowMat = new THREE.MeshBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.6 });
+const glow1 = new THREE.Mesh(glowGeo, glowMat.clone());
+const glow2 = new THREE.Mesh(glowGeo, glowMat.clone());
+glow1.position.set(-0.45, 0.75, 4);
+glow2.position.set(0.45, 0.75, 4);
+scene.add(glow1); scene.add(glow2);
+
+// GAME STATE
+let gameRunning = false, gamePaused = false;
+let gameScore = 0, gameLevel = 1, gameLives = 3;
+let shipX = 0, shipVX = 0;
+let asteroids = [], bullets = [], cores = [];
+let frameCount = 0, spawnTimer = 0, coreTimer = 0;
+let invincible = 0;
+
+const keys = {};
+document.addEventListener('keydown', e => {
+  keys[e.code] = true;
+  if(e.code === 'Space') { e.preventDefault(); if(gameRunning && !gamePaused) shootBullet(); }
+  if(e.code === 'KeyP') pauseGame();
+});
+document.addEventListener('keyup', e => keys[e.code] = false);
+
+// ASTEROID FACTORY
+function makeAsteroid(dangerous=false) {
+  const segs = Math.floor(Math.random()*3)+5;
+  const geo = new THREE.DodecahedronGeometry(0.4+Math.random()*0.6, 0);
+  const col = dangerous ? 0xff3366 : (Math.random()>0.5 ? 0x4a6a8a : 0x223344);
+  const mat = new THREE.MeshPhongMaterial({ color: col, emissive: dangerous ? 0x330011 : 0x000811, shininess: 40 });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set((Math.random()-0.5)*12, (Math.random()-0.5)*1.5, -20);
+  mesh.userData = { vz: 0.08+Math.random()*0.06+(gameLevel*0.008), vx: (Math.random()-0.5)*0.04, vy: (Math.random()-0.5)*0.02, dangerous, rotX: (Math.random()-0.5)*0.04, rotY: (Math.random()-0.5)*0.04 };
+  scene.add(mesh);
+  asteroids.push(mesh);
+}
+
+// ENERGY CORE
+function makeCore() {
+  const geo = new THREE.OctahedronGeometry(0.35, 0);
+  const mat = new THREE.MeshPhongMaterial({ color: 0x00ff88, emissive: 0x003322, shininess: 200, specular: 0x00ff88 });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set((Math.random()-0.5)*10, (Math.random()-0.5)*1, -18);
+  mesh.userData = { vz: 0.05, spin: 0.05 };
+  scene.add(mesh);
+  cores.push(mesh);
+}
+
+// BULLET
+function shootBullet() {
+  const geo = new THREE.CylinderGeometry(0.06, 0.06, 0.6, 6);
+  const mat = new THREE.MeshBasicMaterial({ color: 0x00c8ff });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(shipX, -0.2, 3.2);
+  mesh.rotation.x = Math.PI/2;
+  scene.add(mesh);
+  bullets.push(mesh);
+}
+
+// EXPLOSION
+function explode(pos, col=0xff6600) {
+  const count = 12;
+  for(let i=0;i<count;i++){
+    const geo = new THREE.SphereGeometry(0.1, 4, 4);
+    const mat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 1 });
+    const p = new THREE.Mesh(geo, mat);
+    p.position.copy(pos);
+    p.userData = { vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.2, vz:(Math.random())*0.15, life:1 };
+    scene.add(p);
+    setTimeout(()=>{ scene.remove(p); }, 600);
+    const _p = p;
+    (function fade(){
+      _p.userData.life -= 0.06;
+      _p.material.opacity = Math.max(0, _p.userData.life);
+      _p.position.x += _p.userData.vx;
+      _p.position.y += _p.userData.vy;
+      _p.position.z += _p.userData.vz;
+      if(_p.userData.life > 0) requestAnimationFrame(fade);
+    })();
+  }
+}
+
+function updateHUD() {
+  document.getElementById('hud-score').textContent = gameScore.toLocaleString();
+  document.getElementById('hud-level').textContent = gameLevel;
+  document.getElementById('hud-lives').textContent = '♦'.repeat(Math.max(0,gameLives));
+}
+
+function startGame() {
+  asteroids.forEach(a=>scene.remove(a)); asteroids=[];
+  bullets.forEach(b=>scene.remove(b)); bullets=[];
+  cores.forEach(c=>scene.remove(c)); cores=[];
+  gameScore=0; gameLevel=1; gameLives=3; frameCount=0; spawnTimer=0; coreTimer=0; invincible=0;
+  shipX=0; ship.position.x=0;
+  gameRunning=true; gamePaused=false;
+  document.getElementById('btn-start').textContent='restart';
+  updateHUD();
+  log('entering the void...');
+  log(`wave 1 begins — good luck`, 'dim');
+}
+
+function pauseGame() {
+  if(!gameRunning) return;
+  gamePaused = !gamePaused;
+  log(gamePaused ? '// paused' : '// resumed', 'dim');
+}
+
+function dist2D(a, b) {
+  return Math.sqrt((a.x-b.x)**2 + (a.z-b.z)**2);
+}
+
+// MAIN LOOP
+function gameLoop() {
+  requestAnimationFrame(gameLoop);
+
+  // Animate stars
+  stars.rotation.z += 0.0002;
+
+  if(!gameRunning || gamePaused) { renderer.render(scene, camera); return; }
+
+  frameCount++;
+
+  // Ship movement
+  if(keys['ArrowLeft'] || keys['KeyA']) shipVX = Math.max(shipVX-0.018, -0.18);
+  else if(keys['ArrowRight'] || keys['KeyD']) shipVX = Math.min(shipVX+0.018, 0.18);
+  else shipVX *= 0.8;
+  shipX = Math.max(-6, Math.min(6, shipX + shipVX));
+  ship.position.x = shipX;
+  ship.rotation.z = -shipVX * 4;
+  glow1.position.x = shipX - 0.45;
+  glow2.position.x = shipX + 0.45;
+
+  // Spawn level
+  gameLevel = Math.floor(frameCount / 600) + 1;
+
+  // Spawn asteroids
+  spawnTimer++;
+  const spawnRate = Math.max(18, 50 - gameLevel*3);
+  if(spawnTimer >= spawnRate) { makeAsteroid(Math.random()<0.2); spawnTimer=0; }
+
+  // Spawn cores
+  coreTimer++;
+  if(coreTimer >= 180) { makeCore(); coreTimer=0; }
+
+  // Invincibility flash
+  if(invincible > 0) { invincible--; ship.visible = Math.floor(invincible/4)%2===0; }
+  else { ship.visible = true; }
+
+  // Move bullets
+  for(let i=bullets.length-1;i>=0;i--) {
+    bullets[i].position.z -= 0.4;
+    if(bullets[i].position.z < -22) { scene.remove(bullets[i]); bullets.splice(i,1); continue; }
+    // bullet-asteroid collision
+    let hit = false;
+    for(let j=asteroids.length-1;j>=0;j--) {
+      if(dist2D(bullets[i].position, asteroids[j].position) < 0.9) {
+        explode(asteroids[j].position, asteroids[j].userData.dangerous ? 0xff3366 : 0x00c8ff);
+        const pts = asteroids[j].userData.dangerous ? 50 : 100;
+        gameScore += pts * gameLevel;
+        log(`+${pts*gameLevel} — asteroid ${asteroids[j].userData.dangerous?'⚠️ DANGER':''}`, asteroids[j].userData.dangerous?'normal':'dim');
+        scene.remove(asteroids[j]); asteroids.splice(j,1);
+        scene.remove(bullets[i]); bullets.splice(i,1);
+        hit = true; break;
+      }
+    }
+    if(hit) continue;
+  }
+
+  // Move asteroids
+  for(let i=asteroids.length-1;i>=0;i--) {
+    const a = asteroids[i];
+    a.position.z += a.userData.vz;
+    a.position.x += a.userData.vx;
+    a.rotation.x += a.userData.rotX;
+    a.rotation.y += a.userData.rotY;
+    if(a.position.z > 8) { scene.remove(a); asteroids.splice(i,1); continue; }
+    // collision with ship
+    if(invincible === 0 && dist2D(a.position, ship.position) < 1.0 && Math.abs(a.position.z - ship.position.z) < 1.2) {
+      explode(ship.position, 0xff3366);
+      gameLives--;
+      invincible = 120;
+      log(gameLives > 0 ? `HIT! ${gameLives} lives remaining` : 'GAME OVER');
+      scene.remove(a); asteroids.splice(i,1);
+      if(gameLives <= 0) { gameOver(); return; }
+    }
+  }
+
+  // Move cores
+  for(let i=cores.length-1;i>=0;i--) {
+    cores[i].position.z += cores[i].userData.vz;
+    cores[i].rotation.y += cores[i].userData.spin;
+    if(cores[i].position.z > 8) { scene.remove(cores[i]); cores.splice(i,1); continue; }
+    if(dist2D(cores[i].position, ship.position) < 1.2 && Math.abs(cores[i].position.z - ship.position.z) < 1.2) {
+      explode(cores[i].position, 0x00ff88);
+      gameScore += 500 * gameLevel;
+      log(`CORE COLLECTED! +${500*gameLevel}`);
+      scene.remove(cores[i]); cores.splice(i,1);
+    }
+  }
+
+  updateHUD();
+  renderer.render(scene, camera);
+}
+
+function gameOver() {
+  gameRunning = false;
+  document.getElementById('hud-lives').textContent = '---';
+  log(`=== GAME OVER === score: ${gameScore.toLocaleString()}`);
+  log(`wave reached: ${gameLevel} — submit your score!`, 'dim');
+  // auto-submit if beats leaderboard
+  const lb = getLB().sort((a,b)=>b.score-a.score);
+  if(lb.length < 10 || gameScore > lb[lb.length-1].score) {
+    log('you made the leaderboard! enter your callsign.', 'dim');
+  }
+}
+
+gameLoop();
+</script>
+</body>
+</html>

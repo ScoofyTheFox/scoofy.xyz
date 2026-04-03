@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOCS — SCOOFY.XYZ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="cursor-dot" id="dot"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">SCOOFY<span>.XYZ</span></a>
+  <div class="nav-links">
+    <a href="index.html">home</a>
+    <a href="projects.html">projects</a>
+    <a href="game.html">game</a>
+    <a href="docs.html">docs</a>
+    <a href="about.html">about</a>
+    <a href="contact.html">contact</a>
+  </div>
+  <div class="nav-status"><div class="status-dot"></div>ONLINE</div>
+</nav>
+
+<div style="padding-top:80px;">
+<section style="display:grid;grid-template-columns:200px 1fr;gap:40px;align-items:start;">
+
+  <!-- SIDEBAR -->
+  <div style="position:sticky;top:100px;">
+    <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:3px;color:var(--cyan);margin-bottom:16px;text-transform:uppercase;">// index</div>
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <a href="#overview" style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);text-decoration:none;padding:6px 12px;border-left:2px solid var(--border);transition:all 0.2s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='var(--text-dim)';this.style.borderColor='var(--border)'">overview</a>
+      <a href="#setup" style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);text-decoration:none;padding:6px 12px;border-left:2px solid var(--border);transition:all 0.2s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='var(--text-dim)';this.style.borderColor='var(--border)'">site setup</a>
+      <a href="#pages" style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);text-decoration:none;padding:6px 12px;border-left:2px solid var(--border);transition:all 0.2s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='var(--text-dim)';this.style.borderColor='var(--border)'">adding pages</a>
+      <a href="#game" style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);text-decoration:none;padding:6px 12px;border-left:2px solid var(--border);transition:all 0.2s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='var(--text-dim)';this.style.borderColor='var(--border)'">the game</a>
+      <a href="#customize" style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);text-decoration:none;padding:6px 12px;border-left:2px solid var(--border);transition:all 0.2s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='var(--text-dim)';this.style.borderColor='var(--border)'">customizing</a>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div>
+    <div class="section-label">documentation</div>
+    <div class="section-title">THE <em>MANUAL</em></div>
+
+    <div id="overview" class="card" style="margin-bottom:20px;">
+      <div class="card-corner"></div>
+      <span class="card-tag tag-cyan">OVERVIEW</span>
+      <h2>HOW THIS SITE WORKS</h2>
+      <p>Pure HTML + CSS + JS. No frameworks, no build tools, no node_modules folder of doom. Just files. Every page links to <code style="background:rgba(0,0,0,0.4);color:#ff79c6;padding:2px 6px;border-radius:3px;font-family:var(--font-mono);font-size:12px;">style.css</code> for shared styles.</p>
+    </div>
+
+    <div id="setup" class="card" style="margin-bottom:20px;">
+      <div class="card-corner"></div>
+      <span class="card-tag tag-purple">SETUP</span>
+      <h2>DEPLOYING UPDATES</h2>
+      <div style="font-family:var(--font-mono);font-size:13px;color:var(--text-dim);line-height:2.4;">
+        <div style="color:var(--green)">1. edit the .html file on GitHub</div>
+        <div>2. click "commit changes"</div>
+        <div>3. wait ~60 seconds</div>
+        <div style="color:var(--cyan)">4. scoofy.xyz is live ✓</div>
+      </div>
+    </div>
+
+    <div id="pages" class="card" style="margin-bottom:20px;">
+      <div class="card-corner"></div>
+      <span class="card-tag tag-gold">PAGES</span>
+      <h2>ADDING NEW PAGES</h2>
+      <p>Create a new <code style="background:rgba(0,0,0,0.4);color:#ff79c6;padding:2px 6px;border-radius:3px;font-family:var(--font-mono);font-size:12px;">.html</code> file in your repo. Copy the nav from any existing page. Add your content. Then add a link to it in every page's nav.</p>
+      <div style="margin-top:16px;background:rgba(0,0,0,0.4);border:1px solid var(--border);padding:16px;font-family:var(--font-mono);font-size:12px;color:var(--green);line-height:2;">
+        <div><span style="color:var(--cyan)">newpage.html</span> → scoofy.xyz/newpage</div>
+        <div><span style="color:var(--cyan)">newpage.html</span> or <span style="color:var(--cyan)">newpage/index.html</span></div>
+      </div>
+    </div>
+
+    <div id="game" class="card" style="margin-bottom:20px;">
+      <div class="card-corner"></div>
+      <span class="card-tag tag-red">GAME</span>
+      <h2>VOID RUNNER ENGINE</h2>
+      <p>The game uses Three.js for 3D rendering. The leaderboard is stored in the browser's localStorage — every player who plays on the same device shares scores. To reset, open DevTools → Application → localStorage → delete <code style="background:rgba(0,0,0,0.4);color:#ff79c6;padding:2px 6px;border-radius:3px;font-family:var(--font-mono);font-size:12px;">scoofy_lb_v2</code>.</p>
+    </div>
+
+    <div id="customize" class="card">
+      <div class="card-corner"></div>
+      <span class="card-tag tag-green">CUSTOMIZE</span>
+      <h2>CHANGING COLORS & STYLE</h2>
+      <p>All colors live in <code style="background:rgba(0,0,0,0.4);color:#ff79c6;padding:2px 6px;border-radius:3px;font-family:var(--font-mono);font-size:12px;">style.css</code> under <code style="background:rgba(0,0,0,0.4);color:#ff79c6;padding:2px 6px;border-radius:3px;font-family:var(--font-mono);font-size:12px;">:root</code>. Change <code style="background:rgba(0,0,0,0.4);color:#ff79c6;padding:2px 6px;border-radius:3px;font-family:var(--font-mono);font-size:12px;">--cyan</code> to any hex color and the whole site updates. Fonts are loaded from Google Fonts — change the import URL at the top to swap them out.</p>
+    </div>
+  </div>
+
+</section>
+</div>
+
+<footer>
+  <div style="font-family:var(--font-display);font-size:14px;color:var(--cyan);letter-spacing:4px;margin-bottom:12px">SCOOFY.XYZ</div>
+  <div>BUILT WITH &lt;/&gt; AND VIBES — <a href="https://github.com/ScoofyTheFox">GITHUB</a></div>
+</footer>
+
+<script>
+const dot=document.getElementById('dot'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function a(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROJECTS — SCOOFY.XYZ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="cursor-dot" id="dot"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">SCOOFY<span>.XYZ</span></a>
+  <div class="nav-links">
+    <a href="index.html">home</a>
+    <a href="projects.html">projects</a>
+    <a href="game.html">game</a>
+    <a href="docs.html">docs</a>
+    <a href="about.html">about</a>
+    <a href="contact.html">contact</a>
+  </div>
+  <div class="nav-status"><div class="status-dot"></div>ONLINE</div>
+</nav>
+
+<div style="padding-top:80px;">
+<section>
+  <div class="section-label">project archive</div>
+  <div class="section-title">THINGS I <em>BUILT</em></div>
+
+  <!-- FEATURED -->
+  <div class="card" style="margin-bottom:24px;background:linear-gradient(135deg,rgba(0,200,255,0.05),rgba(139,92,246,0.05));">
+    <div class="card-corner"></div>
+    <span class="card-tag tag-gold">★ FEATURED</span>
+    <h2 style="font-size:20px;">VOID RUNNER — BROWSER GAME</h2>
+    <p>A full 3D asteroid-dodging shooter built with Three.js, living right here on this site. Global leaderboard, 3D graphics, particle effects. No downloads required.</p>
+    <div class="card-footer">
+      <span class="card-date">2026 · THREE.JS · HTML5</span>
+      <a href="game.html" class="card-link">play now →</a>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="card-corner"></div>
+      <span class="card-tag tag-cyan">WIP</span>
+      <h2>PROJECT ALPHA</h2>
+      <p>Something secret. Still in the void. Replace this with your actual project description.</p>
+      <div class="card-footer">
+        <span class="card-date">2026</span>
+        <a href="https://github.com/ScoofyTheFox" class="card-link">github →</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-corner"></div>
+      <span class="card-tag tag-purple">COMPLETE</span>
+      <h2>PROJECT BETA</h2>
+      <p>Another thing you built. Add real details here about what it does and the tech stack.</p>
+      <div class="card-footer">
+        <span class="card-date">2025</span>
+        <a href="#" class="card-link">live demo →</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-corner"></div>
+      <span class="card-tag tag-red">ARCHIVED</span>
+      <h2>OLD EXPERIMENT</h2>
+      <p>Something from the past. Kept for historical record. Might be broken, might be art.</p>
+      <div class="card-footer">
+        <span class="card-date">2024</span>
+        <a href="#" class="card-link">view →</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-corner"></div>
+      <span class="card-tag tag-green">IDEA</span>
+      <h2>NEXT THING</h2>
+      <p>Classified. Something brewing in the void. Coming when it's ready and not a moment before.</p>
+      <div class="card-footer">
+        <span class="card-date">SOON™</span>
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim)">???</span>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<footer>
+  <div style="font-family:var(--font-display);font-size:14px;color:var(--cyan);letter-spacing:4px;margin-bottom:12px">SCOOFY.XYZ</div>
+  <div>BUILT WITH &lt;/&gt; AND VIBES — <a href="https://github.com/ScoofyTheFox">GITHUB</a></div>
+</footer>
+
+<script>
+const dot=document.getElementById('dot'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function a(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
+</script>
+</body>
+</html>
