@@ -1,0 +1,309 @@
+// Edit this file for buttons, URLs, copy fields, icon paths, and order.
+window.PLAYGROUND_LINKS_TEXT = String.raw`--settings--
+default_target=_blank
+view_mode=list
+list_descriptions=false
+
+--links--
+title=YouTube
+order=1
+description=Videos, highlights, and fresh drops.
+url=https://youtube.com/@scoofyx
+icon=icons/youtube.png
+category=content
+type=web
+featured=true
+---
+title=TikTok
+order=2
+description=Short clips, trends, and quick updates.
+url=https://tiktok.com/@scoofyx
+icon=icons/tiktok.png
+category=content
+type=web
+featured=false
+---
+title=Roblox
+order=3
+description=My Roblox profile and game stuff.
+url=https://www.roblox.com/users/1393736506
+icon=icons/roblox.png
+category=community
+type=web
+featured=true
+---
+title=Polytoria
+description=Polytoria.
+url=https://polytoria.com/u/Scoof
+icon=icons/polytoria.png
+category=community
+type=web
+featured=false
+---
+title=Contact Me
+order=4
+description=Tap to copy my Discord username.
+type=copy
+copy_value=porpfox
+copy_label=Copy Discord
+copy_success=Discord copied
+copy_idle=tap to copy
+copy_error=copy failed
+icon=icons/contact.png
+category=community
+featured=true
+---
+title=Instagram
+order=5
+description=Daily updates, stories, and behind-the-scenes posts.
+url=https://instagram.com/
+icon=icons/instagram.png
+category=social
+type=web
+featured=false
+---
+title=Patreon
+order=6
+description=Support me and get extra content.
+url=https://patreon.com/
+icon=icons/patreon.png
+category=support
+type=web
+featured=false
+---
+title=Pinterest
+description=Boards, inspiration, and saved visuals.
+url=https://pinterest.com/
+icon=icons/pinterest.png
+category=social
+type=web
+featured=false
+---
+title=Twitter
+description=Posts, updates, and random thoughts.
+url=https://x.com/scoofyfox
+icon=icons/twitter.png
+category=social
+type=web
+featured=false
+---
+title=Telegram
+description=Join me on Telegram.
+url=https://telegram.org/
+icon=icons/telegram.png
+category=community
+type=web
+featured=false
+---
+title=Discord Server
+description=Join my community server.
+url=https://discord.gg/yourinvite
+icon=icons/discordserver.png
+category=community
+type=web
+featured=false
+---
+title=Bluesky
+description=Find me on Bluesky too.
+url=https://bsky.app/
+icon=icons/bluesky.png
+category=social
+type=web
+featured=false
+---
+title=Twitch
+description=Streams and live moments.
+url=https://twitch.tv/
+icon=icons/twitch.png
+category=content
+type=web
+featured=false
+---
+title=Ko-fi
+description=Support me on Ko-fi.
+url=https://ko-fi.com/
+icon=icons/kofi.png
+category=support
+type=web
+featured=false
+---
+title=Buy Me a Coffee
+description=Drop a little support here.
+url=https://buymeacoffee.com/
+icon=icons/buymeacoffee.png
+category=support
+type=web
+featured=false
+---
+title=Cash App
+description=Support me through Cash App.
+url=https://cash.app/
+icon=icons/cashapp.png
+category=support
+type=web
+featured=false
+---
+title=Spotify
+description=Playlists, favorites, and audio vibes.
+url=https://open.spotify.com/user/31c3vwordnmhtwpr22kbxz3omqju
+icon=icons/spotify.png
+category=content
+type=web
+featured=false
+---
+title=Steam
+description=Games, profile, and activity.
+url=https://store.steampowered.com/
+icon=icons/steam.png
+category=community
+type=web
+featured=false
+---
+title=GitHub
+description=Code, repos, and projects.
+url=https://github.com/scoofythefox
+icon=icons/github.png
+category=work
+type=web
+featured=false
+---
+title=Linktree
+description=My Linktree profile.
+url=https://linktr.ee/
+icon=icons/linktree.png
+category=work
+type=web
+featured=false
+---
+title=Carrd
+description=My Carrd page and extras.
+url=https://carrd.co/
+icon=icons/carrd.png
+category=work
+type=web
+featured=false
+---
+title=straw.page
+description=My straw.page and extra profile links.
+url=https://straw.page/
+icon=icons/strawpage.png
+category=work
+type=web
+featured=false
+---
+title=Refsheet
+description=My refs and character info.
+url=https://refsheet.net/
+icon=icons/refsheet.png
+category=work
+type=web
+featured=false
+---
+title=Pronouns.page
+description=My pronouns and identity page.
+url=https://pronouns.page/
+icon=icons/pronounspage.png
+category=community
+type=web
+featured=false
+---
+title=SoFurry
+description=My SoFurry profile and uploads.
+url=https://www.sofurry.com/
+icon=icons/sofurry.png
+category=community
+type=web
+featured=false
+---
+title=Furry Network
+description=My Furry Network profile and gallery.
+url=https://furrynetwork.com/
+icon=icons/furrynetwork.png
+category=community
+type=web
+featured=false
+---
+title=WikiFur
+description=My WikiFur page and profile info.
+url=https://en.wikifur.com/
+icon=icons/wikifur.png
+category=community
+type=web
+featured=false
+---
+title=NameMC
+description=My Minecraft profile and skin page.
+url=https://namemc.com/scoofyx
+icon=icons/namemc.png
+category=community
+type=web
+featured=false
+---
+title=guns.lol
+description=My guns.lol page.
+url=https://guns.lol/scoof
+icon=icons/gunslol.png
+category=community
+type=web
+featured=false
+---
+title=Redbubble
+description=Prints, merch, and storefront stuff.
+url=https://www.redbubble.com/
+icon=icons/redbubble.png
+category=shop
+type=web
+featured=false
+---
+title=Gumroad
+description=Digital drops and paid extras.
+url=https://gumroad.com/
+icon=icons/gumroad.png
+category=shop
+type=web
+featured=false
+---
+title=Commission Info
+description=Rates, terms, and commission details.
+url=commission_info.html
+icon=icons/commission.png
+category=work
+type=web
+featured=false
+---
+title=Wishlist
+description=Things I want and gift ideas.
+url=wishlist.html
+icon=icons/wishlist.png
+category=support
+type=web
+featured=false
+---
+title=Email
+description=Send me an email directly.
+type=copy
+copy_value=scoofy@example.com
+copy_label=Copy Email
+copy_success=Email copied
+copy_idle=expand to copy
+copy_error=copy failed
+icon=icons/email.png
+category=work
+featured=false
+---
+title=Fur Affinity
+description=Art, uploads, and furry stuff.
+url=https://www.furaffinity.net/user/scoofyx
+icon=icons/furaffinity.png
+category=community
+type=web
+featured=false
+---
+title=Fur Affinity OG
+description=Art, uploads, and furry stuff.
+url=https://www.furaffinity.net/user/r6ckxy
+icon=icons/furaffinity.png
+category=community
+type=web
+featured=false`;
+

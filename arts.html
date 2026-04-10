@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoofy | Arts</title>
+  <meta name="description" content="A gallery page for Scoofy's artwork.">
+  <link rel="icon" type="image/gif" href="assets/scoofy-icon.gif?v=20260409">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Manrope:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
+  <style>
+    :root {
+      --bg: #140a22;
+      --bg-deep: #3c1f67;
+      --panel: rgba(24, 13, 40, 0.74);
+      --text: #f6eeff;
+      --muted: #d2c0eb;
+      --line: rgba(255, 255, 255, 0.1);
+      --accent: #ff48b8;
+      --accent-2: #8ef0d2;
+      --shadow: 0 30px 100px rgba(14, 4, 28, 0.34);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Manrope", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 72, 184, 0.2), transparent 26%),
+        radial-gradient(circle at 82% 18%, rgba(142, 240, 210, 0.16), transparent 22%),
+        linear-gradient(150deg, var(--bg) 0%, #24103b 46%, var(--bg-deep) 100%);
+      padding: 28px 18px;
+    }
+
+    .shell {
+      width: min(100%, 82rem);
+      margin: 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 32px;
+      background: var(--panel);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 24px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent),
+        rgba(255, 255, 255, 0.02);
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-family: "Syne", sans-serif;
+      font-size: clamp(1.9rem, 5vw, 3.2rem);
+      line-height: 0.95;
+    }
+
+    .topbar p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .topbar a {
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      padding: 22px 24px 0;
+    }
+
+    .intro {
+      padding-top: 10px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent-2);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .intro h2 {
+      margin: 0;
+      font-family: "Syne", sans-serif;
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      line-height: 0.94;
+    }
+
+    .intro p {
+      margin: 14px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at top right, rgba(255, 72, 184, 0.22), transparent 28%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+      box-shadow: 0 20px 36px rgba(10, 4, 18, 0.16);
+    }
+
+    .hero-card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .hero-card::after {
+      content: "Featured";
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      background: rgba(14, 8, 24, 0.48);
+      color: #fff4fd;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 24px 24px 0;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-family: "Syne", sans-serif;
+      font-size: 1.4rem;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .gallery-section {
+      padding: 18px 24px 26px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .gallery-grid.compact-grid {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .art-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        rgba(255, 255, 255, 0.03);
+      box-shadow: 0 16px 32px rgba(10, 4, 18, 0.16);
+      transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        border-color 180ms ease;
+      cursor: pointer;
+    }
+
+    .art-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 72, 184, 0.28);
+      box-shadow: 0 22px 42px rgba(10, 4, 18, 0.24);
+    }
+
+    .art-card img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1.05;
+      object-fit: cover;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .art-card.compact-card img {
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      padding: 12px;
+      background:
+        radial-gradient(circle at top, rgba(255, 72, 184, 0.08), transparent 28%),
+        rgba(255, 255, 255, 0.04);
+    }
+
+    .art-copy {
+      padding: 14px 14px 16px;
+    }
+
+    .art-copy strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.98rem;
+    }
+
+    .art-copy span {
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .art-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .art-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent-2);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      padding: 26px;
+      background: rgba(8, 4, 16, 0.78);
+      backdrop-filter: blur(18px);
+    }
+
+    .viewer[hidden] {
+      display: none;
+    }
+
+    .viewer-inner {
+      width: min(100%, 70rem);
+      max-height: min(92vh, 58rem);
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .viewer-media {
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 24px 54px rgba(0, 0, 0, 0.24);
+    }
+
+    .viewer-media img {
+      display: block;
+      width: 100%;
+      max-height: 84vh;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .viewer-copy {
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.16);
+    }
+
+    .viewer-copy h4 {
+      margin: 0;
+      font-family: "Syne", sans-serif;
+      font-size: 1.5rem;
+    }
+
+    .viewer-copy p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .viewer-controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .viewer-controls button {
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .viewer-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar,
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="topbar">
+      <div>
+        <h1>Arts</h1>
+        <p>A gallery space for Scoofy's artwork and character pieces.</p>
+      </div>
+      <a href="index.html">Back Home</a>
+    </section>
+
+    <section class="hero">
+      <div class="intro">
+        <p class="eyebrow">Gallery</p>
+        <h2>Scoofy Art Wall</h2>
+        <p>This page now uses a category template. You can add new sections and images in one place without touching the layout code.</p>
+      </div>
+      <div class="hero-card">
+        <img src="assets/arts/cutie-render-blender-scoofy.png" alt="Featured Scoofy render">
+      </div>
+    </section>
+
+    <div id="gallery-root"></div>
+  </main>
+
+  <section class="viewer" id="viewer" hidden>
+    <div class="viewer-inner">
+      <div class="viewer-media">
+        <img id="viewer-image" alt="">
+      </div>
+      <div class="viewer-copy">
+        <h4 id="viewer-title"></h4>
+        <p id="viewer-caption"></p>
+        <div class="viewer-controls">
+          <button type="button" id="viewer-prev">Prev</button>
+          <button type="button" id="viewer-next">Next</button>
+          <button type="button" id="viewer-close">Close</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const galleryTemplate = [
+      {
+        category: "Illustrations & Renders",
+        description: "Static pieces, portraits, banners, and 3D renders.",
+        layout: "default",
+        items: [
+          { image: "assets/arts/command-prompt-scoofy.png", title: "Command Prompt Scoofy", caption: "Terminal-themed drawing.", tag: "Pixel" },
+          { image: "assets/arts/cute-youtube-scoofy-profile.png", title: "Cute YouTube Profile", caption: "Bright profile-style portrait.", tag: "Profile" },
+          { image: "assets/arts/scoofy-gay-banner.png", title: "Banner Piece", caption: "Colorful banner artwork.", tag: "Banner" },
+          { image: "assets/arts/scoofy-tiktok-pfp-cute-cat-fox.png", title: "TikTok PFP", caption: "Cute cat-fox profile art.", tag: "Avatar" },
+          { image: "assets/arts/scoofy-middle-finger.png", title: "Expression Sketch", caption: "Stylized expressive piece.", tag: "Sketch" },
+          { image: "assets/arts/scoofy-winter.png", title: "Winter Scoofy", caption: "Snowy seasonal scene.", tag: "Winter" },
+          { image: "assets/arts/sigma-scoofy.png", title: "Sigma Scoofy", caption: "Meme-style portrait.", tag: "Meme" },
+          { image: "assets/arts/cutie-render-blender-scoofy.png", title: "Cutie Blender Render", caption: "3D rendered Scoofy with scarf and antlers.", tag: "3D" },
+          { image: "assets/arts/embarrased-rendered-scoofy.png", title: "Embarrassed Render", caption: "Close-up 3D render portrait.", tag: "3D" }
+        ]
+      },
+      {
+        category: "GIF Loops",
+        description: "Animated Scoofy moments and little looping renders.",
+        layout: "compact",
+        items: [
+          { image: "assets/arts/scoofy-gurls.gif", title: "Scoofy Gurls", caption: "Animated render loop.", tag: "GIF" },
+          { image: "assets/arts/scoofy-funni-dawg.gif", title: "Funni Dawg", caption: "Animated goofy render.", tag: "GIF" },
+          { image: "assets/arts/scoofy-zestylaugh.gif", title: "Zesty Laugh", caption: "Animated laughing loop.", tag: "GIF" },
+          { image: "assets/arts/scoofy-defaultdance.gif", title: "Default Dance", caption: "Dance animation loop.", tag: "GIF" },
+          { image: "assets/arts/scoofy-spin.gif", title: "Scoofy Spin", caption: "Spinning 3D animation.", tag: "GIF" }
+        ]
+      }
+    ];
+
+    const allItems = galleryTemplate.flatMap((section) => section.items);
+    const galleryRoot = document.querySelector("#gallery-root");
+    const viewer = document.querySelector("#viewer");
+    const viewerImage = document.querySelector("#viewer-image");
+    const viewerTitle = document.querySelector("#viewer-title");
+    const viewerCaption = document.querySelector("#viewer-caption");
+    const viewerPrev = document.querySelector("#viewer-prev");
+    const viewerNext = document.querySelector("#viewer-next");
+    const viewerClose = document.querySelector("#viewer-close");
+    let currentIndex = 0;
+
+    function createCard(item, compact = false) {
+      const card = document.createElement("article");
+      card.className = `art-card${compact ? " compact-card" : ""}`;
+      card.tabIndex = 0;
+      card.innerHTML = `
+        <img src="${item.image}" alt="${item.title}">
+        <div class="art-copy">
+          <strong>${item.title}</strong>
+          <span>${item.caption}</span>
+          <div class="art-meta">
+            <span class="art-tag">${item.tag || "Art"}</span>
+          </div>
+        </div>
+      `;
+
+      const open = () => openViewer(allItems.findIndex((entry) => entry.image === item.image));
+      card.addEventListener("click", open);
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          open();
+        }
+      });
+
+      return card;
+    }
+
+    function renderTemplate() {
+      galleryTemplate.forEach((section) => {
+        const head = document.createElement("section");
+        head.className = "section-head";
+        head.innerHTML = `
+          <h3>${section.category}</h3>
+          <p>${section.description || ""}</p>
+        `;
+
+        const wrapper = document.createElement("section");
+        wrapper.className = "gallery-section";
+
+        const grid = document.createElement("div");
+        grid.className = `gallery-grid${section.layout === "compact" ? " compact-grid" : ""}`;
+
+        section.items.forEach((item) => {
+          grid.appendChild(createCard(item, section.layout === "compact"));
+        });
+
+        wrapper.appendChild(grid);
+        galleryRoot.appendChild(head);
+        galleryRoot.appendChild(wrapper);
+      });
+    }
+
+    function openViewer(index) {
+      currentIndex = index;
+      const item = allItems[currentIndex];
+      viewerImage.src = item.image;
+      viewerImage.alt = item.title;
+      viewerTitle.textContent = item.title;
+      viewerCaption.textContent = item.caption;
+      viewer.hidden = false;
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeViewer() {
+      viewer.hidden = true;
+      document.body.style.overflow = "";
+    }
+
+    function stepViewer(direction) {
+      currentIndex = (currentIndex + direction + allItems.length) % allItems.length;
+      openViewer(currentIndex);
+    }
+
+    renderTemplate();
+
+    viewerClose.addEventListener("click", closeViewer);
+    viewerPrev.addEventListener("click", () => stepViewer(-1));
+    viewerNext.addEventListener("click", () => stepViewer(1));
+    viewer.addEventListener("click", (event) => {
+      if (event.target === viewer) {
+        closeViewer();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (viewer.hidden) {
+        return;
+      }
+      if (event.key === "Escape") {
+        closeViewer();
+      }
+      if (event.key === "ArrowLeft") {
+        stepViewer(-1);
+      }
+      if (event.key === "ArrowRight") {
+        stepViewer(1);
+      }
+    });
+  </script>
+</body>
+</html>

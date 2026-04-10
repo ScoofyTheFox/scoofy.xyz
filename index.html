@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoofy | Links</title>
+  <meta
+    name="description"
+    content="A stylish Linktree-style landing page for your socials, projects, and favorite links."
+  >
+  <link rel="icon" type="image/gif" href="assets/scoofy-icon.gif?v=20260409" id="site-favicon">
+  <link rel="preload" as="image" href="assets/scoofy-icon.gif?v=20260409">
+  <link rel="preload" as="video" href="assets/backgrounds/background-placeholder.mp4" type="video/mp4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Manrope:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-video-wrap" id="bg-video-wrap" hidden aria-hidden="true">
+    <video class="bg-video" id="bg-video" autoplay muted loop playsinline preload="auto">
+      <source src="assets/backgrounds/background-placeholder.mp4" type="video/mp4">
+    </video>
+  </div>
+  <canvas class="snow-layer" id="snow-layer" aria-hidden="true" hidden></canvas>
+
+  <div class="entry-overlay" id="entry-overlay" role="button" tabindex="0" aria-labelledby="entry-title">
+    <p class="entry-kicker">SCOOFY</p>
+    <h2 id="entry-title">Click Anywhere</h2>
+    <p class="entry-copy">Tap or press any key to open the page.</p>
+    <p class="entry-hint" id="entry-button">click or press any key</p>
+  </div>
+
+  <section class="badge-modal" id="badge-modal" hidden aria-modal="true" role="dialog" aria-labelledby="badge-modal-title">
+    <div class="badge-modal-panel">
+      <p class="badge-modal-kicker" id="badge-modal-kicker"></p>
+      <h3 id="badge-modal-title"></h3>
+      <p id="badge-modal-text"></p>
+      <div class="badge-modal-actions">
+        <button type="button" id="badge-modal-action" hidden>Open</button>
+        <button type="button" id="badge-modal-close">Close</button>
+      </div>
+    </div>
+  </section>
+
+  <button class="sidebar-toggle" type="button" id="sidebar-toggle" aria-expanded="false" aria-controls="sidebar-panel" aria-label="Open sidebar">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <aside class="sidebar" id="sidebar-panel" aria-hidden="true">
+    <div class="sidebar-header">
+      <p class="sidebar-label">Navigation</p>
+      <button class="sidebar-close" type="button" id="sidebar-close" aria-label="Close sidebar">Close</button>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-link active" type="button" id="sidebar-home" aria-label="Home">
+        <img src="assets/home.png" alt="" id="sidebar-home-icon" hidden>
+        <span id="sidebar-home-label">Home</span>
+      </button>
+      <a class="sidebar-link" href="arts.html" id="sidebar-arts" aria-label="Arts">
+        <img src="assets/arts.png" alt="" id="sidebar-arts-icon" hidden>
+        <span id="sidebar-arts-label">Arts</span>
+      </a>
+      <a class="sidebar-link" href="game.html" id="sidebar-game" aria-label="Game">
+        <img src="assets/game.png" alt="" id="sidebar-game-icon" hidden>
+        <span id="sidebar-game-label">Game</span>
+      </a>
+    </nav>
+  </aside>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+
+  <div class="page-shell">
+    <div class="ambient ambient-left"></div>
+    <div class="ambient ambient-right"></div>
+
+    <button class="mute-toggle" type="button" id="mute-toggle" aria-pressed="true" aria-label="Toggle audio">
+      <img src="assets/volume.png" alt="" id="mute-icon" hidden>
+      <span id="mute-label">Audio</span>
+    </button>
+
+    <main class="card">
+      <section class="top-meta reveal" aria-label="Profile details">
+        <a class="meta-chip location-chip" href="#" id="location-chip" hidden>
+          <img src="assets/location.png" alt="" id="location-icon" hidden>
+          <span class="meta-chip-fallback" id="location-fallback" aria-hidden="true">+</span>
+          <span id="location-label">Romania</span>
+        </a>
+        <article class="meta-chip visits-chip" id="visits-chip" hidden aria-label="Visit count">
+          <span class="meta-chip-fallback" aria-hidden="true">#</span>
+          <span id="visits-label">0 visits</span>
+        </article>
+      </section>
+
+      <section class="hero reveal">
+        <div class="avatar">
+          <img
+            src="assets/scoofy-icon.gif?v=20260409"
+            alt="Profile icon"
+            class="avatar-image"
+          >
+          <span class="avatar-fallback" hidden>SC</span>
+        </div>
+        <p class="eyebrow" id="profile-subtitle">CREATOR HUB</p>
+        <h1 id="profile-name">Scoof</h1>
+        <p class="handle" id="profile-handle">@scoofyx</p>
+        <p class="bio" id="profile-bio"></p>
+      </section>
+
+      <section class="badges reveal" aria-label="Profile badges" id="badge-list">
+        <noscript>
+          <p>Add badge icons in <code>settings.txt</code>.</p>
+        </noscript>
+      </section>
+
+      <section class="stats reveal" aria-label="Profile highlights">
+        <article class="stat-chip">
+          <span id="link-count">00</span>
+          <p>active links</p>
+        </article>
+        <article class="stat-chip" id="badge-stat">
+          <span id="badge-count">00</span>
+          <p>badge icons</p>
+        </article>
+        <article class="stat-chip">
+          <span id="stat-handle">SCOOFY.XYZ</span>
+          <p id="stat-caption">link hub</p>
+        </article>
+      </section>
+
+      <section class="controls reveal" aria-label="Link filters" id="filter-controls">
+        <noscript>
+          <p>Enable JavaScript to load your categories and links.</p>
+        </noscript>
+      </section>
+
+      <section class="view-controls reveal" aria-label="View mode">
+        <button class="view-toggle" type="button" data-view="buttons">Buttons</button>
+        <button class="view-toggle active" type="button" data-view="list">List</button>
+      </section>
+
+      <section class="links list-view" id="links-list" aria-live="polite">
+        <noscript>
+          <p>Enable JavaScript to load your link cards from the template file.</p>
+        </noscript>
+      </section>
+
+    </main>
+  </div>
+
+  <audio id="bg-music" loop preload="auto"></audio>
+  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+
+  <script type="text/plain" id="settings-data">
+--settings--
+name=Scoof
+handle=@scoofyx
+subtitle=CREATOR HUB
+bio=This is my corner of the internet. Tap through my favorite platforms, latest work, and the places where I hang out online.
+site_label=SCOOFY.XYZ
+site_caption=link hub
+profile_gif=assets/scoofy-icon.gif?v=20260409
+favicon=assets/scoofy-icon.gif?v=20260409
+theme_mode=dark
+theme_preset=glossy-sunset
+name_gradient_mode=rainbow
+glossy=true
+depth_level=soft
+card_blur=10
+cursor_mode=dot
+cursor_color=#9f6bff
+icon_color_mode=masked
+music_src=assets/music/theme.mp3
+music_list=
+music_autoplay=true
+music_volume=0.35
+shuffle_music=false
+snow_enabled=false
+badges_enabled=false
+location_enabled=true
+location_label=Romania
+location_url=https://earth.google.com/web/search/Romania
+location_icon=assets/location.png
+visits_enabled=true
+visit_start=1
+visit_cooldown_hours=12
+bg=#05040a
+bg_deep=#110d1b
+panel=rgba(10, 8, 18, 0.52)
+text=#f5efff
+muted=#b9aacd
+accent=#9f6bff
+accent_2=#d08cff
+entry_enabled=true
+entry_title=Click Anywhere
+entry_text=Tap or press any key to open the page.
+entry_button=click or press any key
+
+--categories--
+all=All
+social=Social
+content=Content
+community=Community
+support=Support
+shop=Shop
+work=Work
+
+--badges--
+assets/badges/artist.png|Artist|Replace this badge with your artist icon.|message|
+assets/badges/youtuber.png|YouTuber|Replace this badge with your YouTuber icon.|message|
+assets/badges/star.png|Star|Replace this badge with your star icon.|message|
+assets/badges/developer.png|Developer|Replace this badge with your developer icon.|message|
+assets/badges/furry_boykisser.gif|Furry Boykisser|Replace this badge with your GIF badge.|message|
+assets/badges/paw.png|Paw|Replace this badge with your paw icon.|message|
+  </script>
+
+<script type="text/plain" id="links-data">
+--settings--
+default_target=_blank
+view_mode=list
+list_descriptions=false
+
+--links--
+title=YouTube
+order=1
+description=Videos, highlights, and fresh drops.
+url=https://youtube.com/
+icon=icons/youtube.png
+category=content
+type=web
+featured=true
+---
+title=TikTok
+order=2
+description=Short clips, trends, and quick updates.
+url=https://tiktok.com/
+icon=icons/tiktok.png
+category=content
+type=web
+featured=false
+---
+title=Roblox
+order=3
+description=My Roblox profile and game stuff.
+url=https://www.roblox.com/users/profile
+icon=icons/roblox.png
+category=community
+type=web
+featured=true
+---
+title=Contact Me
+order=4
+description=Tap to copy my Discord username.
+type=copy
+copy_value=porpfox
+copy_label=Copy Discord
+copy_success=Discord copied
+copy_idle=tap to copy
+copy_error=copy failed
+icon=icons/contact.png
+category=community
+featured=true
+---
+title=Instagram
+order=5
+description=Daily updates, stories, and behind-the-scenes posts.
+url=https://instagram.com/
+icon=icons/instagram.png
+category=social
+type=web
+featured=false
+---
+title=Patreon
+order=6
+description=Support me and get extra content.
+url=https://patreon.com/
+icon=icons/patreon.png
+category=support
+type=web
+featured=false
+---
+title=Pinterest
+description=Boards, inspiration, and saved visuals.
+url=https://pinterest.com/
+icon=icons/pinterest.png
+category=social
+type=web
+featured=false
+---
+title=Twitter
+description=Posts, updates, and random thoughts.
+url=https://twitter.com/
+icon=icons/twitter.png
+category=social
+type=web
+featured=false
+---
+title=Telegram
+description=Join me on Telegram.
+url=https://telegram.org/
+icon=icons/telegram.png
+category=community
+type=web
+featured=false
+---
+title=Discord Server
+description=Join my community server.
+url=https://discord.gg/yourinvite
+icon=icons/discordserver.png
+category=community
+type=web
+featured=false
+---
+title=Bluesky
+description=Find me on Bluesky too.
+url=https://bsky.app/
+icon=icons/bluesky.png
+category=social
+type=web
+featured=false
+---
+title=Twitch
+description=Streams and live moments.
+url=https://twitch.tv/
+icon=icons/twitch.png
+category=content
+type=web
+featured=false
+---
+title=Ko-fi
+description=Support me on Ko-fi.
+url=https://ko-fi.com/
+icon=icons/kofi.png
+category=support
+type=web
+featured=false
+---
+title=Buy Me a Coffee
+description=Drop a little support here.
+url=https://buymeacoffee.com/
+icon=icons/buymeacoffee.png
+category=support
+type=web
+featured=false
+---
+title=Cash App
+description=Support me through Cash App.
+url=https://cash.app/
+icon=icons/cashapp.png
+category=support
+type=web
+featured=false
+---
+title=Spotify
+description=Playlists, favorites, and audio vibes.
+url=https://open.spotify.com/
+icon=icons/spotify.png
+category=content
+type=web
+featured=false
+---
+title=Steam
+description=Games, profile, and activity.
+url=https://store.steampowered.com/
+icon=icons/steam.png
+category=community
+type=web
+featured=false
+---
+title=GitHub
+description=Code, repos, and projects.
+url=https://github.com/
+icon=icons/github.png
+category=work
+type=web
+featured=false
+---
+title=Linktree
+description=My Linktree profile.
+url=https://linktr.ee/
+icon=icons/linktree.png
+category=work
+type=web
+featured=false
+---
+title=Carrd
+description=My Carrd page and extras.
+url=https://carrd.co/
+icon=icons/carrd.png
+category=work
+type=web
+featured=false
+---
+title=NameMC
+description=My Minecraft profile and skin page.
+url=https://namemc.com/
+icon=icons/namemc.png
+category=community
+type=web
+featured=false
+---
+title=guns.lol
+description=My guns.lol page.
+url=https://guns.lol/
+icon=icons/gunslol.png
+category=community
+type=web
+featured=false
+---
+title=Redbubble
+description=Prints, merch, and storefront stuff.
+url=https://www.redbubble.com/
+icon=icons/redbubble.png
+category=shop
+type=web
+featured=false
+---
+title=Gumroad
+description=Digital drops and paid extras.
+url=https://gumroad.com/
+icon=icons/gumroad.png
+category=shop
+type=web
+featured=false
+---
+title=Commission Info
+description=Rates, terms, and commission details.
+url=commission_info.html
+icon=icons/commission.png
+category=work
+type=web
+featured=false
+---
+title=Wishlist
+description=Things I want and gift ideas.
+url=wishlist.html
+icon=icons/wishlist.png
+category=support
+type=web
+featured=false
+---
+title=Email
+description=Send me an email directly.
+type=copy
+copy_value=scoofy@example.com
+copy_label=Copy Email
+copy_success=Email copied
+copy_idle=expand to copy
+copy_error=copy failed
+icon=icons/email.png
+category=work
+featured=false
+---
+title=Fur Affinity
+description=Art, uploads, and furry stuff.
+url=https://www.furaffinity.net/
+icon=icons/furaffinity.png
+category=community
+type=web
+featured=false
+  </script>
+
+  <script src="settings.js"></script>
+  <script src="links.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
