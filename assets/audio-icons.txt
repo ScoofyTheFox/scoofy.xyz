@@ -1,0 +1,5 @@
+Audio icon placeholders:
+- volume.png = normal audio icon placeholder
+- volume-muted.png = muted audio icon placeholder
+
+Replace either file with your own PNG and keep the same filename if you want the site to pick it up automatically.

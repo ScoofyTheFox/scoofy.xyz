@@ -1,0 +1,10 @@
+Add your sidebar home icon here as:
+
+- `assets/home.png`
+
+If the file exists, the sidebar Home button will show the icon.
+If it does not exist, it will fall back to the text label.
+
+Optional:
+- `assets/game.png` for the sidebar Game icon
+- `assets/arts.png` for the sidebar Arts icon
