@@ -1,0 +1,64 @@
+Edit the real links in index.html inside the links-data block.
+
+Quick reference for the current buttons:
+
+- YouTube = https://youtube.com/@scoofyx
+- TikTok = https://tiktok.com/
+- Roblox = https://www.roblox.com/users/profile
+- Contact Me = copy: porpfox
+- Instagram = https://instagram.com/
+- Patreon = https://patreon.com/
+- Pinterest = https://pinterest.com/
+- Twitter = https://twitter.com/
+- Telegram = https://telegram.org/
+- Discord Server = https://discord.gg/yourinvite
+- Bluesky = https://bsky.app/
+- Twitch = https://twitch.tv/
+- Ko-fi = https://ko-fi.com/
+- Buy Me a Coffee = https://buymeacoffee.com/
+- Cash App = https://cash.app/
+- Spotify = https://open.spotify.com/
+- Steam = https://store.steampowered.com/
+- GitHub = https://github.com/
+- Linktree = https://linktr.ee/
+- Carrd = https://carrd.co/
+- NameMC = https://namemc.com/
+- guns.lol = https://guns.lol/
+- Redbubble = https://www.redbubble.com/
+- Gumroad = https://gumroad.com/
+- Commission Info = commission_info.html
+- Wishlist = wishlist.html
+- Email = copy: scoofy@example.com
+- Fur Affinity = https://www.furaffinity.net/
+
+Icon files used by the page:
+- youtube.png
+- tiktok.png
+- roblox.png
+- contact.png
+- instagram.png
+- patreon.png
+- pinterest.png
+- twitter.png
+- telegram.png
+- discordserver.png
+- bluesky.png
+- twitch.png
+- kofi.png
+- buymeacoffee.png
+- cashapp.png
+- spotify.png
+- steam.png
+- github.png
+- linktree.png
+- carrd.png
+- namemc.png
+- gunslol.png
+- redbubble.png
+- gumroad.png
+- commission.png
+- wishlist.png
+- email.png
+- furaffinity.png
+
+Replace any icon file with your own image and keep the same filename if you want it to update instantly.
