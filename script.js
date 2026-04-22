@@ -4,7 +4,13 @@ const badgeCount = document.querySelector("#badge-count");
 const badgeStat = document.querySelector("#badge-stat");
 const statHandle = document.querySelector("#stat-handle");
 const statCaption = document.querySelector("#stat-caption");
+const modeControls = document.querySelector("#mode-controls");
+const modeToggle = document.querySelector("#mode-toggle");
+const modeToggleText = document.querySelector("#mode-toggle-text");
 const filterControls = document.querySelector("#filter-controls");
+const pageShell = document.querySelector(".page-shell");
+const sideSign = document.querySelector(".side-sign");
+const sideSignText = document.querySelector("#side-sign-text");
 const avatarImage = document.querySelector(".avatar-image");
 const avatarFallback = document.querySelector(".avatar-fallback");
 const cardShell = document.querySelector(".card");
@@ -64,7 +70,7 @@ let appSettings = {
   glossy: "true",
   depth_level: "strong",
   card_blur: "18",
-  cursor_mode: "dot",
+  cursor_mode: "default",
   cursor_color: "#d36e43",
   name_gradient_mode: "rainbow",
   icon_color_mode: "masked",
@@ -110,10 +116,34 @@ let linkSettings = {
 let data = [];
 let currentFilter = "all";
 let currentView = "buttons";
+let currentInterfaceMode = "simple";
+let advancedView = "buttons";
 let musicQueue = [];
 let currentTrackIndex = 0;
 let cardPointerFrame = null;
 let cardPointerState = null;
+let cardPointerCurrent = {
+  rotateX: 0,
+  rotateY: 0,
+  shadowX: 0,
+  shadowY: 0
+};
+let cardPointerTarget = {
+  rotateX: 0,
+  rotateY: 0,
+  shadowX: 0,
+  shadowY: 0
+};
+let cardDragOffset = {
+  x: 0,
+  y: 0
+};
+let cardDragState = null;
+let sideSignOffset = {
+  x: 0,
+  y: 0
+};
+let sideSignDragState = null;
 let cursorFrame = null;
 let cursorState = null;
 let snowAnimationFrame = null;
@@ -260,7 +290,7 @@ function parseLinks(text) {
 }
 
 function setProfileContent() {
-  document.title = `${appSettings.name} | Links`;
+  document.title = "Scoofyx";
 
   if (profileName) {
     profileName.textContent = appSettings.name || "Scoofy";
@@ -271,7 +301,9 @@ function setProfileContent() {
   }
 
   if (profileSubtitle) {
-    profileSubtitle.textContent = appSettings.subtitle || "CREATOR HUB";
+    const subtitle = String(appSettings.subtitle || "").trim();
+    profileSubtitle.textContent = subtitle;
+    profileSubtitle.hidden = !subtitle;
   }
 
   if (profileBio) {
@@ -283,7 +315,7 @@ function setProfileContent() {
   }
 
   if (statCaption) {
-    statCaption.textContent = appSettings.site_caption || "link hub";
+    statCaption.textContent = String(appSettings.site_caption || "").trim();
   }
 
   if (avatarImage) {
@@ -295,15 +327,17 @@ function setProfileContent() {
   }
 
   if (entryTitle) {
-      entryTitle.textContent = appSettings.entry_title || "Click Anywhere";
+      entryTitle.textContent = appSettings.entry_title || "click to enter...";
   }
 
   if (entryCopy) {
-    entryCopy.textContent = appSettings.entry_text || "Tap or press any key to open the page.";
+    entryCopy.textContent = appSettings.entry_text || "";
+    entryCopy.hidden = !String(entryCopy.textContent || "").trim();
   }
 
   if (entryButton) {
-    entryButton.textContent = appSettings.entry_button || "click or press any key";
+    entryButton.textContent = appSettings.entry_button || "";
+    entryButton.hidden = !String(entryButton.textContent || "").trim();
   }
 
 }
@@ -627,12 +661,12 @@ function applyTheme() {
 
   const depth = (appSettings.depth_level || "strong").toLowerCase();
   if (depth === "soft") {
-    root.style.setProperty("--card-rotate-x", "3deg");
-    root.style.setProperty("--card-rotate-y", "4deg");
-    root.style.setProperty("--card-lift", "12px");
-    root.style.setProperty("--icon-tilt-x", "4deg");
-    root.style.setProperty("--icon-tilt-y", "5deg");
-    root.style.setProperty("--icon-hover-lift", "-3px");
+    root.style.setProperty("--card-rotate-x", "5deg");
+    root.style.setProperty("--card-rotate-y", "7deg");
+    root.style.setProperty("--card-lift", "16px");
+    root.style.setProperty("--icon-tilt-x", "7deg");
+    root.style.setProperty("--icon-tilt-y", "9deg");
+    root.style.setProperty("--icon-hover-lift", "-4px");
   } else if (depth === "off") {
     root.style.setProperty("--card-rotate-x", "0deg");
     root.style.setProperty("--card-rotate-y", "0deg");
@@ -641,12 +675,12 @@ function applyTheme() {
     root.style.setProperty("--icon-tilt-y", "0deg");
     root.style.setProperty("--icon-hover-lift", "0px");
   } else {
-    root.style.setProperty("--card-rotate-x", "6deg");
-    root.style.setProperty("--card-rotate-y", "8deg");
-    root.style.setProperty("--card-lift", "18px");
-    root.style.setProperty("--icon-tilt-x", "8deg");
-    root.style.setProperty("--icon-tilt-y", "10deg");
-    root.style.setProperty("--icon-hover-lift", "-6px");
+    root.style.setProperty("--card-rotate-x", "10deg");
+    root.style.setProperty("--card-rotate-y", "14deg");
+    root.style.setProperty("--card-lift", "24px");
+    root.style.setProperty("--icon-tilt-x", "14deg");
+    root.style.setProperty("--icon-tilt-y", "18deg");
+    root.style.setProperty("--icon-hover-lift", "-8px");
   }
 
   if (cardShell) {
@@ -723,6 +757,31 @@ function renderFilterButtons() {
     });
     filterControls.appendChild(button);
   });
+}
+
+function syncActiveFilterPill(filter = "all") {
+  if (!filterControls) {
+    return;
+  }
+
+  filterControls.querySelectorAll(".filter-pill").forEach((pill) => {
+    pill.classList.toggle("active", pill.dataset.filter === filter);
+  });
+}
+
+function renderModeToggle() {
+  if (!modeToggle) {
+    return;
+  }
+
+  const advancedMode = currentInterfaceMode === "advanced";
+  modeToggle.classList.toggle("active", advancedMode);
+  modeToggle.setAttribute("aria-pressed", String(advancedMode));
+  modeToggle.setAttribute("aria-label", advancedMode ? "Switch to simple mode" : "Switch to advanced mode");
+
+  if (modeToggleText) {
+    modeToggleText.textContent = advancedMode ? "Advanced" : "Simple";
+  }
 }
 
 function renderBadges() {
@@ -919,8 +978,36 @@ function openBadgeModal({ label, modalText, action, value, actionLabel }) {
 
 function renderViewToggles() {
   viewToggles.forEach((toggle) => {
-    toggle.classList.toggle("active", toggle.dataset.view === currentView);
+    const effectiveView = currentInterfaceMode === "simple" ? "buttons" : currentView;
+    const isActive = toggle.dataset.view === effectiveView;
+    toggle.classList.toggle("active", isActive);
+    toggle.setAttribute("aria-pressed", String(isActive));
   });
+}
+
+function applyInterfaceMode() {
+  const simpleMode = currentInterfaceMode === "simple";
+
+  if (modeControls) {
+    modeControls.hidden = false;
+  }
+
+  if (filterControls) {
+    filterControls.hidden = simpleMode;
+  }
+
+  const viewControlSection = viewToggles[0] ? viewToggles[0].closest(".view-controls") : null;
+  if (viewControlSection) {
+    viewControlSection.hidden = simpleMode;
+  }
+
+  if (simpleMode) {
+    currentFilter = "all";
+    syncActiveFilterPill("all");
+  }
+
+  renderModeToggle();
+  renderViewToggles();
 }
 
 function buildLinkCard(link, index) {
@@ -958,6 +1045,7 @@ function buildLinkCard(link, index) {
     .toUpperCase();
 
   card.innerHTML = `
+    <span class="link-burst" aria-hidden="true"></span>
     <div class="link-card-main">
       <div class="link-icon">
         <img src="${link.icon}" alt="${link.title} icon" loading="lazy">
@@ -994,41 +1082,192 @@ function buildLinkCard(link, index) {
     fallback.hidden = false;
   });
 
-  if (currentView === "buttons") {
-    let frame = null;
-    let pointerState = null;
+  let motionFrame = null;
+  let hoverTimer = null;
+  let clickBurstTimer = null;
+  let pointerState = null;
+  let currentMotion = {
+    rotateX: 0,
+    rotateY: 0,
+    rotateZ: 0,
+    pointerX: 50,
+    pointerY: 50
+  };
+  let targetMotion = {
+    rotateX: 0,
+    rotateY: 0,
+    rotateZ: 0,
+    pointerX: 50,
+    pointerY: 50
+  };
 
-    card.addEventListener("pointermove", (event) => {
-      pointerState = {
-        x: event.clientX,
-        y: event.clientY
-      };
+  const isInnerActionTarget = (eventTarget) => {
+    return eventTarget instanceof HTMLElement && Boolean(eventTarget.closest(".copy-action-button, .copy-value-field"));
+  };
 
-      if (frame) {
+  const clearHoverTimer = () => {
+    if (hoverTimer) {
+      window.clearTimeout(hoverTimer);
+      hoverTimer = null;
+    }
+  };
+
+  const resetHoverMotion = () => {
+    clearHoverTimer();
+    pointerState = null;
+    card.classList.remove("pressing");
+    card.classList.remove("hover-armed");
+
+    targetMotion = {
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
+      pointerX: 50,
+      pointerY: 50
+    };
+    startMotionAnimation();
+  };
+
+  const triggerClickBurst = () => {
+    card.classList.remove("click-burst");
+
+    if (clickBurstTimer) {
+      window.clearTimeout(clickBurstTimer);
+      clickBurstTimer = null;
+    }
+
+    void card.offsetWidth;
+    card.classList.add("click-burst");
+    clickBurstTimer = window.setTimeout(() => {
+      card.classList.remove("click-burst");
+      clickBurstTimer = null;
+    }, 420);
+  };
+
+  const armHoverCharge = () => {
+    clearHoverTimer();
+    hoverTimer = window.setTimeout(() => {
+      card.classList.add("hover-armed");
+    }, 1000);
+  };
+
+  const startMotionAnimation = () => {
+    if (motionFrame) {
+      return;
+    }
+
+    const step = () => {
+      const smoothing = currentView === "buttons" ? 0.22 : 0.18;
+      currentMotion.rotateX += (targetMotion.rotateX - currentMotion.rotateX) * smoothing;
+      currentMotion.rotateY += (targetMotion.rotateY - currentMotion.rotateY) * smoothing;
+      currentMotion.rotateZ += (targetMotion.rotateZ - currentMotion.rotateZ) * smoothing;
+      currentMotion.pointerX += (targetMotion.pointerX - currentMotion.pointerX) * smoothing;
+      currentMotion.pointerY += (targetMotion.pointerY - currentMotion.pointerY) * smoothing;
+
+      card.style.setProperty("--link-rotate-x", `${currentMotion.rotateX.toFixed(2)}deg`);
+      card.style.setProperty("--link-rotate-y", `${currentMotion.rotateY.toFixed(2)}deg`);
+      card.style.setProperty("--link-rotate-z", `${currentMotion.rotateZ.toFixed(2)}deg`);
+      card.style.setProperty("--link-pointer-x", `${currentMotion.pointerX.toFixed(1)}%`);
+      card.style.setProperty("--link-pointer-y", `${currentMotion.pointerY.toFixed(1)}%`);
+
+      const settled = Math.abs(targetMotion.rotateX - currentMotion.rotateX) < 0.05
+        && Math.abs(targetMotion.rotateY - currentMotion.rotateY) < 0.05
+        && Math.abs(targetMotion.rotateZ - currentMotion.rotateZ) < 0.05
+        && Math.abs(targetMotion.pointerX - currentMotion.pointerX) < 0.2
+        && Math.abs(targetMotion.pointerY - currentMotion.pointerY) < 0.2;
+
+      if (settled) {
+        currentMotion = { ...targetMotion };
+        card.style.setProperty("--link-rotate-x", `${targetMotion.rotateX.toFixed(2)}deg`);
+        card.style.setProperty("--link-rotate-y", `${targetMotion.rotateY.toFixed(2)}deg`);
+        card.style.setProperty("--link-rotate-z", `${targetMotion.rotateZ.toFixed(2)}deg`);
+        card.style.setProperty("--link-pointer-x", `${targetMotion.pointerX.toFixed(1)}%`);
+        card.style.setProperty("--link-pointer-y", `${targetMotion.pointerY.toFixed(1)}%`);
+        motionFrame = null;
         return;
       }
 
-      frame = window.requestAnimationFrame(() => {
-        const bounds = card.getBoundingClientRect();
-        const x = pointerState.x - bounds.left;
-        const y = pointerState.y - bounds.top;
-        const maxRotateX = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--icon-tilt-x")) || 0;
-        const maxRotateY = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--icon-tilt-y")) || 0;
-        const rotateX = ((y / bounds.height) - 0.5) * -maxRotateX * 2;
-        const rotateY = ((x / bounds.width) - 0.5) * maxRotateY * 2;
-        card.style.transform = `translateY(-3px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        frame = null;
-      });
-    });
+      motionFrame = window.requestAnimationFrame(step);
+    };
 
-    card.addEventListener("pointerleave", () => {
-      if (frame) {
-        window.cancelAnimationFrame(frame);
-        frame = null;
-      }
-      card.style.transform = "";
-    });
-  }
+    motionFrame = window.requestAnimationFrame(step);
+  };
+
+  const queuePointerMotion = () => {
+    if (!pointerState) {
+      return;
+    }
+
+    const bounds = card.getBoundingClientRect();
+
+    if (!bounds.width || !bounds.height) {
+      return;
+    }
+
+    const ratioX = Math.min(Math.max((pointerState.x - bounds.left) / bounds.width, 0), 1);
+    const ratioY = Math.min(Math.max((pointerState.y - bounds.top) / bounds.height, 0), 1);
+    const buttonView = currentView === "buttons";
+    const maxRotateX = buttonView ? 18 : 8;
+    const maxRotateY = buttonView ? 24 : 10;
+    const maxRotateZ = buttonView ? 8 : 3;
+
+    targetMotion = {
+      rotateX: (ratioY - 0.5) * maxRotateX * 2,
+      rotateY: (ratioX - 0.5) * -maxRotateY * 2,
+      rotateZ: (ratioX - 0.5) * -maxRotateZ,
+      pointerX: ratioX * 100,
+      pointerY: ratioY * 100
+    };
+
+    startMotionAnimation();
+  };
+
+  card.addEventListener("pointerenter", (event) => {
+    if (event.pointerType === "touch") {
+      return;
+    }
+
+    pointerState = {
+      x: event.clientX,
+      y: event.clientY
+    };
+    queuePointerMotion();
+    armHoverCharge();
+  });
+
+  card.addEventListener("pointermove", (event) => {
+    if (event.pointerType === "touch") {
+      return;
+    }
+
+    pointerState = {
+      x: event.clientX,
+      y: event.clientY
+    };
+    queuePointerMotion();
+  });
+
+  card.addEventListener("pointerleave", resetHoverMotion);
+  card.addEventListener("pointercancel", resetHoverMotion);
+  card.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "touch" || isInnerActionTarget(event.target)) {
+      return;
+    }
+
+    card.classList.add("pressing");
+  });
+  card.addEventListener("pointerup", () => {
+    card.classList.remove("pressing");
+  });
+  card.addEventListener("blur", resetHoverMotion);
+  card.addEventListener("focus", armHoverCharge);
+  card.addEventListener("click", (event) => {
+    if (isInnerActionTarget(event.target)) {
+      return;
+    }
+
+    triggerClickBurst();
+  });
 
   if (isExpandableCopy) {
     const meta = card.querySelector(".link-meta small");
@@ -1050,7 +1289,7 @@ function buildLinkCard(link, index) {
     };
 
     card.addEventListener("click", (event) => {
-      if (event.target instanceof HTMLElement && event.target.closest(".copy-action-button, .copy-value-field")) {
+      if (isInnerActionTarget(event.target)) {
         return;
       }
       toggleExpand();
@@ -1117,16 +1356,26 @@ function renderLinks(filter = "all") {
     return;
   }
 
-  currentFilter = filter;
+  const activeFilter = currentInterfaceMode === "simple" ? "all" : filter;
+  const activeView = currentInterfaceMode === "simple" ? "buttons" : currentView;
+
+  currentFilter = activeFilter;
   linksList.innerHTML = "";
-  linksList.classList.toggle("list-view", currentView === "list");
+  linksList.classList.toggle("list-view", activeView === "list");
   linksList.classList.toggle(
     "list-descriptions-enabled",
-    String(linkSettings.list_descriptions).toLowerCase() === "true"
+    activeView === "list" && String(linkSettings.list_descriptions).toLowerCase() === "true"
   );
 
   const visibleLinks = data.filter((link) => {
-    return filter === "all" || link.category === filter;
+    const isCopy = (link.type || "web").toLowerCase() === "copy";
+    const isClosed = !isCopy && isPlaceholderLink(link);
+
+    if (isClosed) {
+      return false;
+    }
+
+    return activeFilter === "all" || link.category === activeFilter;
   });
 
   visibleLinks.forEach((link, index) => {
@@ -1204,6 +1453,7 @@ async function loadTemplates() {
   };
   data = parsedLinks.links;
   currentView = (linkSettings.view_mode || "buttons").toLowerCase();
+  advancedView = currentView;
 }
 
 if (avatarImage && avatarFallback) {
@@ -1213,40 +1463,191 @@ if (avatarImage && avatarFallback) {
   });
 }
 
+function applyCardShellMotion() {
+  if (!cardShell) {
+    return;
+  }
+
+  const dragX = cardDragOffset.x;
+  const dragY = cardDragOffset.y;
+  const rotateX = cardPointerCurrent.rotateX;
+  const rotateY = cardPointerCurrent.rotateY;
+  const shadowX = cardPointerCurrent.shadowX;
+  const shadowY = cardPointerCurrent.shadowY;
+
+  if (Math.abs(dragX) < 0.05 && Math.abs(dragY) < 0.05 && Math.abs(rotateX) < 0.05 && Math.abs(rotateY) < 0.05 && Math.abs(shadowX) < 0.2 && Math.abs(shadowY) < 0.2) {
+    cardShell.style.transform = "";
+    cardShell.style.boxShadow = "";
+    return;
+  }
+
+  cardShell.style.transform = `translate3d(${dragX.toFixed(2)}px, ${dragY.toFixed(2)}px, 0) perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+  cardShell.style.boxShadow = `${shadowX.toFixed(2)}px ${shadowY.toFixed(2)}px 72px rgba(0, 0, 0, 0.26)`;
+}
+
+function isCardDragHandle(eventTarget, event) {
+  if (!cardShell) {
+    return false;
+  }
+
+  if (eventTarget instanceof HTMLElement && eventTarget.closest("a, button, input, textarea, select, .link-card, .badge, .mode-toggle, .view-toggle, .filter-pill, .copy-dropdown, .copy-value-field, .copy-action-button")) {
+    return false;
+  }
+
+  const bounds = cardShell.getBoundingClientRect();
+  return event.clientY - bounds.top <= 120;
+}
+
 if (cardShell) {
+  cardShell.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0 || !isCardDragHandle(event.target, event)) {
+      return;
+    }
+
+    event.preventDefault();
+    cardDragState = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: cardDragOffset.x,
+      originY: cardDragOffset.y
+    };
+    cardPointerState = null;
+    cardPointerTarget = {
+      rotateX: 0,
+      rotateY: 0,
+      shadowX: 0,
+      shadowY: 0
+    };
+    cardShell.classList.remove("drag-ready");
+    cardShell.classList.add("dragging");
+    cardShell.setPointerCapture(event.pointerId);
+    applyCardShellMotion();
+  });
+
   cardShell.addEventListener("pointermove", (event) => {
+    if (cardDragState && cardDragState.pointerId === event.pointerId) {
+      cardDragOffset = {
+        x: cardDragState.originX + (event.clientX - cardDragState.startX),
+        y: cardDragState.originY + (event.clientY - cardDragState.startY)
+      };
+      applyCardShellMotion();
+      return;
+    }
+
     cardPointerState = {
       x: event.clientX,
       y: event.clientY
     };
 
+    const dragReady = isCardDragHandle(event.target, event);
+    cardShell.classList.toggle("drag-ready", dragReady);
+
     if (cardPointerFrame) {
       return;
     }
 
-    cardPointerFrame = window.requestAnimationFrame(() => {
+    const stepCardShellMotion = () => {
       const bounds = cardShell.getBoundingClientRect();
-      const x = cardPointerState.x - bounds.left;
-      const y = cardPointerState.y - bounds.top;
-      const maxRotateX = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-rotate-x")) || 0;
-      const maxRotateY = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-rotate-y")) || 0;
-      const lift = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-lift")) || 0;
-      const rotateX = ((y / bounds.height) - 0.5) * -maxRotateX * 2;
-      const rotateY = ((x / bounds.width) - 0.5) * maxRotateY * 2;
-      cardShell.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      cardShell.style.boxShadow = `${-rotateY * 1.2}px ${lift + rotateX * -0.6}px 56px rgba(0, 0, 0, 0.24)`;
-      cardPointerFrame = null;
-    });
+
+      if (!bounds.width || !bounds.height) {
+        cardPointerFrame = null;
+        return;
+      }
+
+      if (cardPointerState) {
+        const x = cardPointerState.x - bounds.left;
+        const y = cardPointerState.y - bounds.top;
+        const maxRotateX = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-rotate-x")) || 0;
+        const maxRotateY = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-rotate-y")) || 0;
+        const lift = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-lift")) || 0;
+
+        cardPointerTarget.rotateX = ((y / bounds.height) - 0.5) * maxRotateX * 2;
+        cardPointerTarget.rotateY = ((x / bounds.width) - 0.5) * -maxRotateY * 2;
+        cardPointerTarget.shadowX = -cardPointerTarget.rotateY * 1.2;
+        cardPointerTarget.shadowY = lift + cardPointerTarget.rotateX * 0.6;
+      }
+
+      const smoothing = 0.16;
+        cardPointerCurrent.rotateX += (cardPointerTarget.rotateX - cardPointerCurrent.rotateX) * smoothing;
+        cardPointerCurrent.rotateY += (cardPointerTarget.rotateY - cardPointerCurrent.rotateY) * smoothing;
+        cardPointerCurrent.shadowX += (cardPointerTarget.shadowX - cardPointerCurrent.shadowX) * smoothing;
+        cardPointerCurrent.shadowY += (cardPointerTarget.shadowY - cardPointerCurrent.shadowY) * smoothing;
+
+        applyCardShellMotion();
+
+        const settled = Math.abs(cardPointerTarget.rotateX - cardPointerCurrent.rotateX) < 0.05
+          && Math.abs(cardPointerTarget.rotateY - cardPointerCurrent.rotateY) < 0.05
+          && Math.abs(cardPointerTarget.shadowX - cardPointerCurrent.shadowX) < 0.2
+          && Math.abs(cardPointerTarget.shadowY - cardPointerCurrent.shadowY) < 0.2;
+
+        if (settled) {
+          cardPointerCurrent = { ...cardPointerTarget };
+          applyCardShellMotion();
+          cardPointerFrame = null;
+          return;
+        }
+
+      cardPointerFrame = window.requestAnimationFrame(stepCardShellMotion);
+    };
+
+    cardPointerFrame = window.requestAnimationFrame(stepCardShellMotion);
   });
 
   cardShell.addEventListener("pointerleave", () => {
-    if (cardPointerFrame) {
-      window.cancelAnimationFrame(cardPointerFrame);
-      cardPointerFrame = null;
+    cardShell.classList.remove("drag-ready");
+    if (cardDragState) {
+      return;
     }
-    cardShell.style.transform = "";
-    cardShell.style.boxShadow = "";
+
+    cardPointerState = null;
+    cardPointerTarget = {
+      rotateX: 0,
+      rotateY: 0,
+      shadowX: 0,
+      shadowY: 0
+    };
+
+    if (!cardPointerFrame) {
+      const settleCardShellMotion = () => {
+        const smoothing = 0.16;
+        cardPointerCurrent.rotateX += (cardPointerTarget.rotateX - cardPointerCurrent.rotateX) * smoothing;
+        cardPointerCurrent.rotateY += (cardPointerTarget.rotateY - cardPointerCurrent.rotateY) * smoothing;
+        cardPointerCurrent.shadowX += (cardPointerTarget.shadowX - cardPointerCurrent.shadowX) * smoothing;
+        cardPointerCurrent.shadowY += (cardPointerTarget.shadowY - cardPointerCurrent.shadowY) * smoothing;
+
+        const settled = Math.abs(cardPointerCurrent.rotateX) < 0.05
+          && Math.abs(cardPointerCurrent.rotateY) < 0.05
+          && Math.abs(cardPointerCurrent.shadowX) < 0.2
+          && Math.abs(cardPointerCurrent.shadowY) < 0.2;
+
+        if (settled) {
+          cardPointerCurrent = { ...cardPointerTarget };
+          cardPointerFrame = null;
+          applyCardShellMotion();
+          return;
+        }
+
+        applyCardShellMotion();
+        cardPointerFrame = window.requestAnimationFrame(settleCardShellMotion);
+      };
+
+      cardPointerFrame = window.requestAnimationFrame(settleCardShellMotion);
+    }
   });
+
+  const stopCardDrag = (event) => {
+    if (!cardDragState || (event && cardDragState.pointerId !== event.pointerId)) {
+      return;
+    }
+
+    cardDragState = null;
+    cardShell.classList.remove("dragging");
+    cardShell.releasePointerCapture?.(event.pointerId);
+  };
+
+  cardShell.addEventListener("pointerup", stopCardDrag);
+  cardShell.addEventListener("pointercancel", stopCardDrag);
 }
 
 function setupCursor() {
@@ -1421,9 +1822,191 @@ function closeSidebar() {
   document.body.classList.remove("sidebar-open");
 }
 
+function animateGuiEntrance() {
+  const animatedNodes = [
+    {
+      element: pageShell,
+      fromTransform: "translate3d(0, 72px, 0)",
+      toTransform: "translate3d(0, 0, 0)",
+      duration: 620,
+      delay: 0,
+      easing: "cubic-bezier(0.16, 1, 0.3, 1)"
+    },
+    {
+      element: sidebarToggle,
+      fromTransform: "translate3d(0, 36px, 0)",
+      toTransform: "translate3d(0, 0, 0)",
+      duration: 500,
+      delay: 60,
+      easing: "cubic-bezier(0.16, 1, 0.3, 1)"
+    }
+  ].filter((entry) => entry.element);
+
+  animatedNodes.forEach(({ element, fromTransform }) => {
+    element.style.opacity = "0";
+    element.style.transform = fromTransform;
+  });
+
+  void document.body.offsetWidth;
+  document.body.classList.remove("pre-enter");
+  document.body.classList.add("entered");
+
+  window.requestAnimationFrame(() => {
+    animatedNodes.forEach(({ element, fromTransform, toTransform, duration, delay, easing }) => {
+      const animation = element.animate(
+        [
+          {
+            opacity: 0,
+            transform: fromTransform
+          },
+          {
+            opacity: 1,
+            transform: toTransform
+          }
+        ],
+        {
+          duration,
+          delay,
+          easing,
+          fill: "forwards"
+        }
+      );
+
+      animation.onfinish = () => {
+        element.style.removeProperty("opacity");
+        element.style.removeProperty("transform");
+      };
+    });
+  });
+}
+
+function setupSideSignAnimation() {
+  if (!sideSign || !sideSignText) {
+    return;
+  }
+
+  const baseText = "scoofy.xyz";
+  const symbols = "!@#$%^&*()[]{}<>?/\\|=+-_~:;.,`";
+  let timeoutId = null;
+
+  const randomSymbol = () => symbols[Math.floor(Math.random() * symbols.length)];
+  const corruptText = (count, anchor = baseText) => {
+    const keep = Math.max(0, anchor.length - count);
+    return baseText
+      .split("")
+      .map((char, index) => {
+        if (index < keep) {
+          return anchor[index] || char;
+        }
+        if (char === ".") {
+          return Math.random() > 0.5 ? "." : randomSymbol();
+        }
+        return randomSymbol();
+      })
+      .join("");
+  };
+
+  const sequence = [
+    { build: () => baseText, hold: 1350, glitch: false },
+    { build: () => "scoofy.xy", hold: 70, glitch: false },
+    { build: () => "scoofy.x", hold: 60, glitch: false },
+    { build: () => "scoofy.", hold: 55, glitch: false },
+    { build: () => "scoofy", hold: 65, glitch: false },
+    { build: () => corruptText(3), hold: 55, glitch: true },
+    { build: () => corruptText(5), hold: 50, glitch: true },
+    { build: () => corruptText(7), hold: 48, glitch: true },
+    { build: () => corruptText(6, "scoo"), hold: 55, glitch: true },
+    { build: () => corruptText(4, "scoofy"), hold: 60, glitch: true },
+    { build: () => "scoofy.", hold: 60, glitch: false },
+    { build: () => corruptText(3, "scoofy.x"), hold: 58, glitch: true },
+    { build: () => "scoofy.xy", hold: 58, glitch: false },
+    { build: () => baseText, hold: 1400, glitch: false }
+  ];
+
+  let index = 0;
+
+  const tick = () => {
+    const frame = sequence[index];
+    sideSignText.textContent = frame.build();
+    sideSignText.classList.toggle("glitching", Boolean(frame.glitch));
+    index = (index + 1) % sequence.length;
+    timeoutId = window.setTimeout(tick, frame.hold);
+  };
+
+  sideSign.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0) {
+      return;
+    }
+
+    event.preventDefault();
+    sideSignDragState = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: sideSignOffset.x,
+      originY: sideSignOffset.y
+    };
+    sideSign.classList.add("dragging");
+    sideSign.setPointerCapture(event.pointerId);
+  });
+
+  sideSign.addEventListener("pointermove", (event) => {
+    if (!sideSignDragState || sideSignDragState.pointerId !== event.pointerId) {
+      return;
+    }
+
+    sideSignOffset = {
+      x: sideSignDragState.originX + (event.clientX - sideSignDragState.startX),
+      y: sideSignDragState.originY + (event.clientY - sideSignDragState.startY)
+    };
+    sideSign.style.setProperty("--side-sign-x", `${sideSignOffset.x}px`);
+    sideSign.style.setProperty("--side-sign-y", `${sideSignOffset.y}px`);
+  });
+
+  const stopSideSignDrag = (event) => {
+    if (!sideSignDragState || sideSignDragState.pointerId !== event.pointerId) {
+      return;
+    }
+
+    sideSignDragState = null;
+    sideSign.classList.remove("dragging");
+    sideSign.releasePointerCapture?.(event.pointerId);
+  };
+
+  sideSign.addEventListener("pointerup", stopSideSignDrag);
+  sideSign.addEventListener("pointercancel", stopSideSignDrag);
+
+  if (timeoutId) {
+    window.clearTimeout(timeoutId);
+  }
+  tick();
+}
+
+if (modeToggle) {
+  modeToggle.addEventListener("click", () => {
+    if (currentInterfaceMode === "simple") {
+      currentInterfaceMode = "advanced";
+      currentView = advancedView || (linkSettings.view_mode || "buttons").toLowerCase();
+    } else {
+      advancedView = currentView;
+      currentInterfaceMode = "simple";
+      currentView = "buttons";
+      currentFilter = "all";
+    }
+
+    applyInterfaceMode();
+    renderLinks(currentFilter);
+  });
+}
+
 viewToggles.forEach((toggle) => {
   toggle.addEventListener("click", () => {
+    if (currentInterfaceMode === "simple") {
+      return;
+    }
+
     currentView = toggle.dataset.view || "buttons";
+    advancedView = currentView;
     renderViewToggles();
     renderLinks(currentFilter);
   });
@@ -1451,15 +2034,11 @@ if (sidebarBackdrop) {
 if (sidebarHome) {
   sidebarHome.addEventListener("click", () => {
     currentFilter = "all";
-    currentView = (linkSettings.view_mode || "buttons").toLowerCase();
-    renderViewToggles();
+    currentView = currentInterfaceMode === "simple"
+      ? "buttons"
+      : (advancedView || (linkSettings.view_mode || "buttons").toLowerCase());
+    applyInterfaceMode();
     renderLinks("all");
-
-    if (filterControls) {
-      filterControls.querySelectorAll(".filter-pill").forEach((pill, index) => {
-        pill.classList.toggle("active", index === 0);
-      });
-    }
 
     window.scrollTo({
       top: 0,
@@ -1528,21 +2107,36 @@ async function init() {
   setupVisitChip();
   applyTheme();
   renderFilterButtons();
+  renderModeToggle();
+  applyInterfaceMode();
   renderViewToggles();
   renderBadges();
   renderLinks();
   setupCursor();
   setupMusic();
   setupSnow();
+  setupSideSignAnimation();
 
   const entryEnabled = String(appSettings.entry_enabled).toLowerCase() === "true";
   document.body.classList.toggle("overlay-active", entryEnabled);
+  document.body.classList.toggle("pre-enter", entryEnabled);
 
-  if (entryOverlay && entryButton) {
+  if (!entryEnabled) {
+    document.body.classList.remove("entered");
+  }
+
+  if (entryOverlay) {
     if (!entryEnabled) {
       entryOverlay.classList.add("hidden");
     } else {
+      let entryClosed = false;
       const closeOverlay = async () => {
+        if (entryClosed) {
+          return;
+        }
+
+        entryClosed = true;
+
         if (bgMusic && bgMusic.src) {
           try {
             await bgMusic.play();
@@ -1552,14 +2146,14 @@ async function init() {
         }
 
         entryOverlay.classList.add("hidden");
-        document.body.classList.remove("overlay-active");
+        window.setTimeout(() => {
+          document.body.classList.remove("overlay-active");
+          animateGuiEntrance();
+        }, 220);
       };
 
       entryOverlay.addEventListener("click", closeOverlay, { once: true });
-      document.addEventListener("keydown", async (event) => {
-        event.preventDefault();
-        await closeOverlay();
-      }, { once: true });
+      window.addEventListener("keydown", closeOverlay, { once: true });
     }
   }
 }

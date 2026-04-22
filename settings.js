@@ -2,10 +2,10 @@
 window.PLAYGROUND_SETTINGS_TEXT = String.raw`--settings--
 name=Scoof
 handle=@scoofyx
-subtitle=CREATOR HUB
-bio=This is my corner of the internet. Tap through my favorite platforms, latest work, and the places where I hang out online.
+subtitle=
+bio=𝗱𝘂𝗺𝗯 𝗽𝘂𝗿𝗽𝗹𝗲 𝗳𝗼𝘅 𝘀𝗵𝗮𝗿𝗸!!!                             𝐚 𝐟𝐮𝐫𝐫𝐲 𝐛𝐭𝐰🥹
 site_label=SCOOFY.XYZ
-site_caption=link hub
+site_caption=
 profile_gif=assets/scoofy-icon.gif?v=20260409
 favicon=assets/scoofy-icon.gif?v=20260409
 theme_mode=dark
@@ -14,7 +14,7 @@ name_gradient_mode=rainbow
 glossy=true
 depth_level=soft
 card_blur=10
-cursor_mode=dot
+cursor_mode=default
 cursor_color=#9f6bff
 icon_color_mode=masked
 music_src=assets/music/theme.mp3
@@ -28,7 +28,7 @@ location_enabled=true
 location_label=Romania
 location_url=https://earth.google.com/web/search/Romania
 location_icon=assets/location.png
-visits_enabled=true
+visits_enabled=false
 visit_start=1
 visit_cooldown_hours=12
 bg=#05040a
@@ -39,9 +39,9 @@ muted=#b9aacd
 accent=#9f6bff
 accent_2=#d08cff
 entry_enabled=true
-entry_title=Click Anywhere
-entry_text=Tap or press any key to open the page.
-entry_button=click or press any key
+entry_title=click to enter...
+entry_text=
+entry_button=
 
 --categories--
 all=All

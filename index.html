@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scoofy | Links</title>
+  <title>Scoofyx</title>
   <meta
     name="description"
     content="A stylish Linktree-style landing page for your socials, projects, and favorite links."
@@ -19,19 +19,17 @@
   >
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="pre-enter overlay-active">
   <div class="bg-video-wrap" id="bg-video-wrap" hidden aria-hidden="true">
     <video class="bg-video" id="bg-video" autoplay muted loop playsinline preload="auto">
       <source src="assets/backgrounds/background-placeholder.mp4" type="video/mp4">
     </video>
   </div>
+  <div class="vhs-overlay" aria-hidden="true"></div>
   <canvas class="snow-layer" id="snow-layer" aria-hidden="true" hidden></canvas>
 
-  <div class="entry-overlay" id="entry-overlay" role="button" tabindex="0" aria-labelledby="entry-title">
-    <p class="entry-kicker">SCOOFY</p>
-    <h2 id="entry-title">Click Anywhere</h2>
-    <p class="entry-copy">Tap or press any key to open the page.</p>
-    <p class="entry-hint" id="entry-button">click or press any key</p>
+  <div class="entry-overlay" id="entry-overlay" aria-label="Click to enter">
+    <h2 id="entry-title">click to enter...</h2>
   </div>
 
   <section class="badge-modal" id="badge-modal" hidden aria-modal="true" role="dialog" aria-labelledby="badge-modal-title">
@@ -78,6 +76,9 @@
   <div class="page-shell">
     <div class="ambient ambient-left"></div>
     <div class="ambient ambient-right"></div>
+    <div class="side-sign" aria-hidden="true">
+      <span class="side-sign-text" id="side-sign-text">scoofy.xyz</span>
+    </div>
 
     <button class="mute-toggle" type="button" id="mute-toggle" aria-pressed="true" aria-label="Toggle audio">
       <img src="assets/volume.png" alt="" id="mute-icon" hidden>
@@ -106,7 +107,7 @@
           >
           <span class="avatar-fallback" hidden>SC</span>
         </div>
-        <p class="eyebrow" id="profile-subtitle">CREATOR HUB</p>
+        <p class="eyebrow" id="profile-subtitle" hidden></p>
         <h1 id="profile-name">Scoof</h1>
         <p class="handle" id="profile-handle">@scoofyx</p>
         <p class="bio" id="profile-bio"></p>
@@ -118,19 +119,13 @@
         </noscript>
       </section>
 
-      <section class="stats reveal" aria-label="Profile highlights">
-        <article class="stat-chip">
-          <span id="link-count">00</span>
-          <p>active links</p>
-        </article>
-        <article class="stat-chip" id="badge-stat">
-          <span id="badge-count">00</span>
-          <p>badge icons</p>
-        </article>
-        <article class="stat-chip">
-          <span id="stat-handle">SCOOFY.XYZ</span>
-          <p id="stat-caption">link hub</p>
-        </article>
+      <section class="mode-controls reveal" aria-label="Interface mode" id="mode-controls">
+        <button class="mode-toggle" type="button" id="mode-toggle" aria-pressed="false" aria-label="Switch to advanced mode">
+          <span class="mode-toggle-track">
+            <span class="mode-toggle-thumb"></span>
+          </span>
+          <span class="mode-toggle-text" id="mode-toggle-text">Simple</span>
+        </button>
       </section>
 
       <section class="controls reveal" aria-label="Link filters" id="filter-controls">
@@ -172,7 +167,7 @@ name_gradient_mode=rainbow
 glossy=true
 depth_level=soft
 card_blur=10
-cursor_mode=dot
+cursor_mode=default
 cursor_color=#9f6bff
 icon_color_mode=masked
 music_src=assets/music/theme.mp3
@@ -197,9 +192,9 @@ muted=#b9aacd
 accent=#9f6bff
 accent_2=#d08cff
 entry_enabled=true
-entry_title=Click Anywhere
-entry_text=Tap or press any key to open the page.
-entry_button=click or press any key
+entry_title=click to enter...
+entry_text=
+entry_button=
 
 --categories--
 all=All
