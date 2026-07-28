@@ -1,0 +1,100 @@
+scoofy.xyz - guestbook presets (reference copy)
+================================================
+This is just a readable list of what's currently in config.js.
+To actually change anything, edit ../../config.js (this .txt does nothing on its own).
+Golden rule: only ADD to the end of a list - never reorder/delete (entries store position numbers).
+
+
+USERNAME KEYWORDS
+=================
+People build an anonymous name by picking ONE word from each column:
+    A + Capitalized(B) + C      e.g.   feral + Possum + _2003  =  feralPossum_2003
+
+--- Column A (adjective / prefix) ---
+sleepy
+feral
+tuff
+cursed
+legally
+mildly
+extremely
+sus
+based
+unhinged
+dizzy
+radioactive
+nocturnal
+discount
+anonymous
+forbidden
+emotional
+sopping
+vintage
+haunted
+
+--- Column B (critter) ---
+wolf
+tiger
+possum
+raccoon
+gecko
+moth
+goblin
+frog
+crow
+ferret
+axolotl
+shark
+bat
+husky
+opossum
+skunk
+otter
+dragon
+snail
+gremlin
+
+--- Column C (suffix) ---   ('' at the top = no suffix)
+(none)
+_2003
+_420
+.exe
+.zip
+_v2
+~
+_official
+_69
+_XxX
+_real
+_online
+_ttv
+_fr
+_wav
+
+
+PRESET MESSAGES
+===============
+The only things anyone can "say" - all pre-written, no free typing.
+
+how tf did i even find this site
+i was NOT supposed to be here. staying anyway.
+signing the guestbook that swore it didn't exist. gotcha.
+netscape navigator gang, rise UP
+certified 2003 core. 10/10 no notes.
+clicked one (1) wrong link and now i live here
+the hit counter lied to me and honestly? respect.
+would get lost here again. immediately.
+why is the fish looking at me like that
+i'm legally scoofy's friend now. i read the terms.
+under construction since 2003 and it SHOWS (affectionate)
+the burn cursor is unreasonably cool, just saying
+came for the vibes, stayed bc the leave button ran away
+this website pays for itself in vibes fr fr
+guess i'll... sign the guestbook
+best viewed in netscape, worst viewed in public
+my mom asked what i was doing. couldn't explain this.
+popup number 4 is my roman empire now
+i have no idea what year it is anymore and i'm okay
+scoofy if you see this: hi. this rules. carry on.
+pressed every single button. worth it. no regrets.
+found this at 3am and it healed something in me
