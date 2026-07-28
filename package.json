@@ -1,0 +1,13 @@
+{
+  "name": "scoofy-guestbook",
+  "version": "1.0.0",
+  "private": true,
+  "description": "scoofy.xyz - cursed EPHEMERAL guestbook (in-memory, wiped on restart). zero dependencies.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

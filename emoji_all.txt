@@ -1,0 +1,59 @@
+============================================================
+ scoofy.xyz :: ALL EMOJI CODES
+============================================================
+Type any of these :codes: anywhere in content.js (headline,
+blurb, dropdowns, marquees, retirement notice, etc.) and it
+turns into a tiny inline image on the page.
+
+Also works in guestbook messages / anywhere the site renders text.
+
+------------------------------------------------------------
+ SCOOFY FACES  (your purple fox w/ glasses)
+------------------------------------------------------------
+:scoofy:            default face (thumbs up)
+:scoofy_approve:    thumbs up  👍
+:scoofy_disagree:   thumbs down  👎
+:scoofy_up:         pointing up
+:scoofy_nerd:       pointing up, buck teeth (nerd)
+:scoofy_mf:         the rude one  🖕
+:scoofy_pet:        getting petted
+
+------------------------------------------------------------
+ REACTIONS  (animated webp)
+------------------------------------------------------------
+:pensive:           pensive / sad-thinking
+:dies:              dies
+:blep:              tongue blep
+:troll:             trollface
+:sadcat:            sad cat
+:istg:              i swear to god
+:appear:            appears
+:disappear:         disappears
+
+------------------------------------------------------------
+ FOX
+------------------------------------------------------------
+:fox:               generic fox face
+
+------------------------------------------------------------
+ FLAGS  (built in)
+------------------------------------------------------------
+:mlm:               MLM pride flag
+:us:                USA flag
+:usa:               USA flag (same as :us:)
+:ro:                Romania flag
+:romania:           Romania flag (same as :ro:)
+
+------------------------------------------------------------
+ HOW TO ADD A NEW ONE
+------------------------------------------------------------
+1. drop your image in  assets/emojis/  (png works best)
+2. open  config.js  ->  emojis: { ... }
+3. add a line:      mycode: 'assets/emojis/myfile.png',
+4. now  :mycode:  works everywhere.
+
+note: the scoofy face PNGs currently have WHITE backgrounds, so
+inline they show a small white square. ask to have them cut to
+transparent if you want them to sit clean in text/marquees.
+
+(this file is just a reference list - editing it changes nothing.)

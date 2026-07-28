@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>~*~ scoofy.xyz :: guestbook ~*~</title>
+  <meta name="description" content="sign the guestbook you were told didn't exist." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👽</text></svg>" />
+</head>
+<body>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <!-- scrolling nonsense, top -->
+  <div class="marquee top">
+    <div class="marquee-run">
+      ✍ SIGN THE GUESTBOOK ✍ &nbsp;•&nbsp; you cannot type your own name (i know how freaky you people get) &nbsp;•&nbsp; sorry but it had to be done &nbsp;•&nbsp; have fun :3 (AND SUBSCRIBE TO @SCOOFYX)
+    </div>
+  </div>
+
+  <main class="wrap gb-wrap">
+    <section class="gb-head">
+      <a class="gb-back" href="index.html">« back to the chaos</a>
+
+      <p class="kicker" id="kicker">// sign here or don't</p>
+
+      <h1 class="headline wordart gb-wordart">
+        the<br />guestbook
+      </h1>
+
+      <div class="badges">
+        <span class="badge blink">REAL!</span>
+        <span class="badge">ANON!!</span>
+        <span class="badge blink">NO MODS*</span>
+      </div>
+
+      <p class="sub">
+        rules are simple: you're <em><b><i>anonymous</i></b></em>. you can't type your own name OR
+        your own message, because some people are fuckin freaks :disappear:.
+        <b>assemble</b> yourself from the parts, pick a message, and like whatever you want.
+        (i might <em>update</em> this guestbook system).
+      </p>
+    </section>
+
+    <!-- ============ COMPOSE ============ -->
+    <section class="gb-compose">
+      <h2 class="gb-ch">▸ assemble your entry</h2>
+
+      <div class="gb-step">
+        <div class="gb-step-label">1 · pick a face</div>
+        <div class="gb-pfps" id="gbPfps"><!-- js fills this --></div>
+      </div>
+
+      <div class="gb-step">
+        <div class="gb-step-label">2 · build a name (you stay anon, promise)</div>
+        <div class="gb-name-cols" id="gbNameCols"><!-- js fills this --></div>
+        <div class="gb-name-preview">you are: <b id="gbNamePrev">...</b></div>
+      </div>
+
+      <div class="gb-step">
+        <div class="gb-step-label">3 · pick a message (no custom text yet :istg:)</div>
+        <div class="gb-msgs" id="gbMsgs"><!-- js fills this --></div>
+      </div>
+
+      <div class="gb-step">
+        <div class="gb-step-label">4 · flag or anonymous?</div>
+        <button class="gb-cc-toggle" id="gbCcToggle" type="button">🌍 ...</button>
+      </div>
+
+      <p class="gb-warn" id="gbWarn"></p>
+      <div class="gb-actions">
+        <button class="btn ghost" id="gbShuffle">🎲 randomize me</button>
+        <button class="btn primary" id="gbSign">✍ sign the guestbook »</button>
+      </div>
+    </section>
+
+    <!-- ============ FEED ============ -->
+    <section class="gb-feedwrap">
+      <h2 class="gb-fh"><span id="gbCount">0</span> signatures &amp; counting <span class="gb-status" id="gbStatus">… connecting</span></h2>
+      <div class="gb-countries" id="gbCountries"><!-- js fills the flag tally --></div>
+      <div class="gb-sort">
+        <span class="gb-sort-label">sort:</span>
+        <button class="gb-sortbtn sel" type="button" data-sort="new">newest</button>
+        <button class="gb-sortbtn" type="button" data-sort="top">most ♥</button>
+      </div>
+      <div class="gb-feed" id="gbFeed"><!-- js fills this --></div>
+    </section>
+
+  </main>
+
+  <!-- scrolling nonsense, bottom -->
+  <div class="marquee bottom">
+    <div class="marquee-run reverse">
+      :dies: tell your friends. recruit people. :dies: &nbsp;•&nbsp; every signature is a someone... (no shit sherloc-) &nbsp;•&nbsp; this guestbook will make history or the site more fun :3 &nbsp;•&nbsp; tell ALL your friends about scoofy.xyz :3 &nbsp;•&nbsp; every signature is a stranger </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="content.js"></script>
+  <script src="script.js"></script>
+  <script src="guestbook.js"></script>
+</body>
+</html>
