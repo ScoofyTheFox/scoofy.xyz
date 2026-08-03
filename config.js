@@ -1,4 +1,4 @@
-// ============================================================
+// =============================================================
 //  scoofy.xyz :: GUESTBOOK CONFIG
 //  This is the ONLY file you need to edit to change faces, names,
 //  or messages. It's loaded before guestbook.js.
