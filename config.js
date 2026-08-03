@@ -10,6 +10,13 @@
 // ============================================================
 window.GB_CONFIG = {
 
+  // ---- BACKEND URL -------------------------------------------------------
+  // Where the guestbook talks to. Leave '' if the Cloudflare Worker sits on
+  // your own domain at scoofy.xyz/api/* (the recommended "same-origin" setup).
+  // ONLY set this if your worker is on a *.workers.dev URL instead, e.g.:
+  //   apiBase: 'https://scoofy-guestbook.yourname.workers.dev',
+  apiBase: 'https://scoofy-guestbook.scoofyx.workers.dev',
+
   // ---- FACES people can pick ---------------------------------------------
   // Add a face in any of these ways:
   //   • an emoji  ................  '🐺'            (auto-draws a colored tile)
