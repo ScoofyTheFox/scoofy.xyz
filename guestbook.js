@@ -25,7 +25,11 @@ const DEFAULT_MSGS = ['how tf did i even find this site','guess i\'ll... sign th
 /* ============================================================
    ENDPOINTS + STATE
    ============================================================ */
-const API = { list: '/api/guestbook', sign: '/api/guestbook', like: '/api/like' };
+// API base: '' = same-origin (github pages behind a Cloudflare /api/* route).
+// If your worker lives on a *.workers.dev URL instead, set `apiBase` in config.js
+// to that URL (e.g. 'https://scoofy-guestbook.you.workers.dev') and it's used here.
+const API_BASE = ((CFG.apiBase || '') + '').replace(/\/+$/, '');
+const API = { list: API_BASE + '/api/guestbook', sign: API_BASE + '/api/guestbook', like: API_BASE + '/api/like' };
 let MODE = 'demo';
 let serverEntries = [];          // live entries (indices, not text)
 let myLikes = new Set();         // live: ids this IP liked
