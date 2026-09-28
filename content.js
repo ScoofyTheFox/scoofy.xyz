@@ -108,6 +108,7 @@ window.GB_CONFIG.text = {
   signoffStar: "★彡 THE END OF AN ERA :disappear: 彡★",
   signoffTitle: "📢 OFFICIAL RETIREMENT NOTICE",
   signoffDate: 'as of <b>july 27, 2026</b> i\'m putting the keyboard down.',
+  signoffUpdate: 'tiny update: stuff got revamped on september 29, 2026 bc i was bored lol.',
   signoffList: '<li>done with <b>scripting &amp; coding</b>. genuinely. that chapter\'s closed. mostly...</li><li>done with <b>roblox</b> too. it was fun. they fucked their own game up (multi billionaire company that cant afford better HUMAN moderation btw).</li><li>pouring everything into <b>YOUTUBE</b> now → new chapter (hopefully).</li>',
   signoffThanks: 'and... thank you, <i>myself</i>. for being cool enough to build dumb little websites and worlds out of nothing. that was sick as hell. 🫡',
 

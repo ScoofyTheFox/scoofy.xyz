@@ -57,7 +57,8 @@ async function api(req, res, url) {
   const hash = ipHash(clientIP(req));
 
   if (url.pathname === '/api/guestbook' && req.method === 'GET') {
-    return sendJSON(res, 200, { ok: true, entries, myLikes: [...(likesByIp.get(hash) || [])], you: { country: country(req) } });
+    const visibleEntries = entries.map(({ ownerHash, ...entry }) => ({ ...entry, mine: ownerHash === hash }));
+    return sendJSON(res, 200, { ok: true, entries: visibleEntries, myLikes: [...(likesByIp.get(hash) || [])], you: { country: country(req) } });
   }
 
   if (url.pathname === '/api/guestbook' && req.method === 'POST') {
@@ -67,6 +68,7 @@ async function api(req, res, url) {
     if (![pfp, a, b, c, msg].every(idx)) return sendJSON(res, 400, { error: 'invalid fields' });
 
     const now = Date.now();
+    if (entries.some((entry) => entry.ownerHash === hash)) return sendJSON(res, 409, { error: 'u already have a message here. delete urs first if u wanna replace it.' });
     if (now - (cooldown.get(hash) || 0) < SIGN_COOLDOWN_MS) return sendJSON(res, 429, { error: 'slow down, one signature every 30 minutes' });
     const today = new Date().toISOString().slice(0, 10);
     const rec = daily.get(hash);
@@ -79,12 +81,23 @@ async function api(req, res, url) {
     const showCountry = (body && body.showCountry) === true;
     const cc = showCountry ? (country(req) || cleanCC(body.cc)) : '';
 
-    const entry = { id: 'g' + now.toString(36) + Math.random().toString(36).slice(2, 7), pfp, a, b, c, msg, likes: 0, ts: now, country: cc };
+    const entry = { id: 'g' + now.toString(36) + Math.random().toString(36).slice(2, 7), pfp, a, b, c, msg, likes: 0, ts: now, country: cc, ownerHash: hash };
     entries.unshift(entry);
     if (entries.length > MAX_ENTRIES) entries.length = MAX_ENTRIES;
     cooldown.set(hash, now);
     daily.set(hash, { day: today, count: used + 1 });
-    return sendJSON(res, 200, { ok: true, entry });
+    const { ownerHash, ...visibleEntry } = entry;
+    return sendJSON(res, 200, { ok: true, entry: { ...visibleEntry, mine: true } });
+  }
+
+  const deleteMatch = url.pathname.match(/^\/api\/guestbook\/([a-z0-9]+)$/i);
+  if (deleteMatch && req.method === 'DELETE') {
+    const entry = entries.find((e) => e.id === deleteMatch[1]);
+    if (!entry || entry.ownerHash !== hash) return sendJSON(res, 404, { error: 'that message is not urs (or it is already gone)' });
+    entries = entries.filter((e) => e !== entry);
+    for (const likes of likesByIp.values()) likes.delete(entry.id);
+    cooldown.delete(hash);
+    return sendJSON(res, 200, { ok: true, id: entry.id });
   }
 
   if (url.pathname === '/api/like' && req.method === 'POST') {
@@ -92,6 +105,7 @@ async function api(req, res, url) {
     const id = typeof (body && body.id) === 'string' ? body.id : '';
     const entry = entries.find((e) => e.id === id);
     if (!entry) return sendJSON(res, 404, { error: 'unknown entry' });
+    if (entry.ownerHash === hash) return sendJSON(res, 403, { error: 'u cant like ur own message, lol' });
     let set = likesByIp.get(hash); if (!set) { set = new Set(); likesByIp.set(hash, set); }
     let liked;
     if (set.has(id)) { set.delete(id); entry.likes = Math.max(0, entry.likes - 1); liked = false; }

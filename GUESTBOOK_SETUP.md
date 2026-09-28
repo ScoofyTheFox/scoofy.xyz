@@ -18,6 +18,7 @@ refresh). The status pill in the feed header tells you which mode you're in.
 ```
 GET  /api/guestbook   → list current signatures
 POST /api/guestbook   → sign (body = integer indices only)
+DELETE /api/guestbook/:id → delete a signature owned by your IP hash
 POST /api/like        → toggle a like
 ```
 
@@ -86,6 +87,12 @@ touch `guestbook.js` or `server.js` to add a face or a message. See `config.js` 
   message). The server stores integers. There is nothing to inject - stored XSS is impossible.
 - **Raw IPs are never stored** - only a salted SHA-256 hash, for rate-limit + one-like-per-IP.
 - **Rate limited** per IP (cooldown + daily cap); Cloudflare in front adds WAF/bot filtering.
+- **One active signature per public IP hash.** Its owner can delete it, which clears the cooldown
+  and lets them post a replacement. The same hash cannot like its own signature. This is a rough
+  shared-network check, not a hardware/browser fingerprint; people behind the same router share it.
+- These ownership/delete rules are implemented in this repo's `server.js`. The configured
+  `*.workers.dev` guestbook is a separate service; its code isn't in this folder, so the hosted
+  Worker must be updated with the same API behavior before these controls work on the live site.
 - Output is HTML-escaped client-side too, belt-and-suspenders.
 - Path-traversal guarded in the static server.
 

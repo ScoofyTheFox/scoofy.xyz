@@ -29,7 +29,7 @@ const DEFAULT_MSGS = ['how tf did i even find this site','guess i\'ll... sign th
 // If your worker lives on a *.workers.dev URL instead, set `apiBase` in config.js
 // to that URL (e.g. 'https://scoofy-guestbook.you.workers.dev') and it's used here.
 const API_BASE = ((CFG.apiBase || '') + '').replace(/\/+$/, '');
-const API = { list: API_BASE + '/api/guestbook', sign: API_BASE + '/api/guestbook', like: API_BASE + '/api/like' };
+const API = { list: API_BASE + '/api/guestbook', sign: API_BASE + '/api/guestbook', remove: (id) => API_BASE + '/api/guestbook/' + encodeURIComponent(id), like: API_BASE + '/api/like' };
 let MODE = 'demo';
 let serverEntries = [];          // live entries (indices, not text)
 let myLikes = new Set();         // live: ids this IP liked
@@ -71,7 +71,15 @@ function resolvePfp(entry, i) {
   if (typeof entry === 'string') return isImgPath(entry) ? entry : avatar(entry, bg);
   return avatar('👽', bg);
 }
-const PFP_SRC = ((CFG.pfps && CFG.pfps.length) ? CFG.pfps : DEFAULT_PFPS).map(resolvePfp);
+const RAW_PFPS = (CFG.pfps && CFG.pfps.length) ? CFG.pfps : DEFAULT_PFPS;
+const PFP_SRC = RAW_PFPS.map(resolvePfp);
+// Legacy emoji entries stay at their original indexes so old signatures keep
+// their faces, but only real image/GIF entries appear in the picker now.
+const PFP_CHOICES = RAW_PFPS.map((entry, index) => ({ index, src: PFP_SRC[index] })).filter(({ index }) => {
+  const entry = RAW_PFPS[index];
+  if (typeof entry === 'string') return isImgPath(entry);
+  return !!(entry && typeof entry === 'object' && typeof entry.img === 'string');
+});
 const pfpSrc = (i) => PFP_SRC[i] || PFP_SRC[0];
 
 /* ============================================================
@@ -90,7 +98,8 @@ const msgFrom = (m) => MESSAGES[m] ?? '(a message lost to time)';
    COMPOSE STATE
    ============================================================ */
 const rand = (n) => Math.floor(Math.random() * n);
-let selPfp = rand(PFP_SRC.length);
+const randomPfpIndex = () => PFP_CHOICES.length ? PFP_CHOICES[rand(PFP_CHOICES.length)].index : 0;
+let selPfp = randomPfpIndex();
 let sel = { a: rand(NAME_A.length), b: rand(NAME_B.length), c: rand(NAME_C.length) };
 let selMsg = -1;
 const buildName = () => nameFrom(sel.a, sel.b, sel.c);
@@ -142,13 +151,13 @@ function renderPfps() {
   const box = $('gbPfps');
   if (!box) return;
   box.innerHTML = '';
-  PFP_SRC.forEach((src, i) => {
+  PFP_CHOICES.forEach(({ src, index }, choiceIndex) => {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'gb-pfp' + (i === selPfp ? ' sel' : '');
-    b.setAttribute('aria-label', 'pick avatar ' + (i + 1));
+    b.className = 'gb-pfp' + (index === selPfp ? ' sel' : '');
+    b.setAttribute('aria-label', 'pick image avatar ' + (choiceIndex + 1));
     b.innerHTML = `<img src="${esc(src)}" alt="" />`;
-    b.addEventListener('click', () => { selPfp = i; renderPfps(); });
+    b.addEventListener('click', () => { selPfp = index; renderPfps(); });
     box.appendChild(b);
   });
 }
@@ -218,7 +227,7 @@ function rawEntries() {
     return {
       id: e.id, pfpIdx: e.pfp, name: nameFrom(e.a, e.b, e.c), msg: msgFrom(e.msg),
       ts: e.ts, base, likes: MODE === 'live' ? base : base + (liked ? 1 : 0),
-      liked, cc: e.country || '',
+      liked, mine: !!e.mine, cc: e.country || '',
     };
   });
 }
@@ -237,10 +246,11 @@ function entryHTML(d, fresh) {
       `<div class="gb-entry-top"><span class="gb-entry-name">${esc(d.name)}</span>${geo}` +
         `<span class="gb-entry-time">${ago(d.ts)}</span></div>` +
       `<div class="gb-entry-msg">${window.cemojify ? window.cemojify(esc(d.msg)) : esc(d.msg)}</div>` +
+      (d.mine ? `<button class="gb-delete" type="button" data-id="${esc(d.id)}">delete urs</button>` :
       `<button class="gb-like${d.liked ? ' liked' : ''}" type="button" data-id="${esc(d.id)}" ` +
         `data-base="${d.base}" aria-pressed="${d.liked}">` +
         `<span class="gb-heart">${d.liked ? '♥' : '♡'}</span>` +
-        `<span class="gb-like-count">${d.likes}</span></button>` +
+        `<span class="gb-like-count">${d.likes}</span></button>`) +
     `</div></div>`;
 }
 
@@ -279,13 +289,35 @@ function updateLikeBtn(btn, liked, count) {
   const feed = $('gbFeed');
   if (!feed) return;
   feed.addEventListener('click', async (ev) => {
+    const deleteBtn = ev.target.closest && ev.target.closest('.gb-delete');
+    if (deleteBtn) {
+      const id = deleteBtn.dataset.id;
+      if (MODE === 'live') {
+        try {
+          const res = await fetch(API.remove(id), { method: 'DELETE' });
+          const data = await res.json();
+          if (!res.ok || !data.ok) { showWarn(data.error || 'couldnt delete that one'); return; }
+          serverEntries = serverEntries.filter((entry) => entry.id !== id);
+          localStorage.removeItem('gb_lastsign');
+          renderFeed();
+          showWarn('gone. u can leave a new message now.');
+        } catch { showWarn('network hiccup. couldnt delete it rn.'); }
+      } else {
+        localEntries = localEntries.filter((entry) => entry.id !== id);
+        saveEntries(localEntries);
+        localStorage.removeItem('gb_lastsign');
+        renderFeed();
+        showWarn('gone. u can leave a new message now.');
+      }
+      return;
+    }
     const btn = ev.target.closest && ev.target.closest('.gb-like');
     if (!btn) return;
     const id = btn.dataset.id;
 
     if (MODE === 'live') {
       try {
-        const res = await fetch(API.like, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id }) });
+      const res = await fetch(API.like, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id }) });
         const data = await res.json();
         if (data && data.ok) {
           if (data.liked) myLikes.add(id); else myLikes.delete(id);
@@ -293,7 +325,7 @@ function updateLikeBtn(btn, liked, count) {
           if (se) se.likes = data.likes;
           updateLikeBtn(btn, data.liked, data.likes);
           if (data.liked) confettiAt(btn);
-        }
+        } else if (res.status === 403) showWarn(data.error || 'u cant like ur own message');
       } catch { /* network hiccup */ }
     } else {
       const nowLiked = !localLikes.has(id);
@@ -323,7 +355,7 @@ function setStatus(state) {
    ACTIONS
    ============================================================ */
 function shuffleIdentity() {
-  selPfp = rand(PFP_SRC.length);
+  selPfp = randomPfpIndex();
   sel = { a: rand(NAME_A.length), b: rand(NAME_B.length), c: rand(NAME_C.length) };
   selMsg = rand(MESSAGES.length);
   renderPfps(); renderName(); renderMsgs();
@@ -369,7 +401,7 @@ async function sign() {
     localEntries.unshift({
       id: 'u' + Date.now().toString(36) + rand(1e6).toString(36),
       pfp: payload.pfp, a: payload.a, b: payload.b, c: payload.c, msg: payload.msg,
-      likes: 0, ts: Date.now(), country: (showCountry && myCC) ? myCC : '',
+      likes: 0, ts: Date.now(), country: (showCountry && myCC) ? myCC : '', mine: true,
     });
     saveEntries(localEntries);
     afterSign(localEntries[0].id);
@@ -383,7 +415,7 @@ function afterSign(freshId) {
   confettiAt($('gbSign'));
   if (typeof spawnMeme === 'function') spawnMeme('happyDog');
   if (typeof playSfx === 'function') playSfx('sign');
-  selPfp = rand(PFP_SRC.length);
+  selPfp = randomPfpIndex();
   sel = { a: rand(NAME_A.length), b: rand(NAME_B.length), c: rand(NAME_C.length) };
   selMsg = -1;
   renderPfps(); renderName(); renderMsgs();

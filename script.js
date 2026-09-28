@@ -10,7 +10,9 @@ const TXT = (window.GB_CONFIG && window.GB_CONFIG.text) || {}; // editable copy,
 (function lockdown() {
   const stop = (e) => e.preventDefault();
   document.addEventListener('contextmenu', stop);   // no right-click menu
-  document.addEventListener('selectstart', stop);    // no text selection
+  if (!document.body.classList.contains('alphabet-page')) {
+    document.addEventListener('selectstart', stop);  // the secret page keeps selectable text
+  }
   document.addEventListener('dragstart', stop);      // no dragging images/text out
   document.addEventListener('keydown', (e) => {
     const k = (e.key || '').toLowerCase();
@@ -325,6 +327,9 @@ const MEMES = {
   hatWolf:   { f: "tuff dark wolf knowledge with hat on.png", c: ["fun fact: this popup has no purpose whatsoever.", "did you know? no. you didn't. now you sorta do.", "knowledge is power. this popup is not knowledge."] },
   zenWolf:   { f: "tuff wolf meditating in the mountains.jpg", c: ["i achieved inner peace. then you showed up.", "was meditating. you ruined it. it's fine.", "namaste. now leave. gently."] },
   crazyWolf: { f: "wolf with hands on face worried wondering depressed sad going crazy.jpg", c: ["oh FUCK someone's HERE. WHAT DO I DO", "AAAA a person AAAA", "i was not emotionally ready for a visitor"] },
+  nerd:      { f: "erm-actually-nerd.gif", c: ["erm actually, you found the secret page.", "well, technically, you were not supposed to be here.", "the alphabet is wrong. source: trust me."] },
+  bigBrain:  { f: "big-brain.jpg", c: ["the galaxy brain has decoded the alphabet.", "big brain move: keep scrolling.", "your IQ increased by one (1). maybe."] },
+  nuhUh:     { f: "nuh-uh.jpg", c: ["nuh uh. you did not see this popup.", "this page is classified. nuh uh.", "nope. wrong alphabet. turn around."] },
 };
 const MEME_KEYS = Object.keys(MEMES);
 const WIN_NAMES = TXT.winNames || ["scoofy.exe", "warning.exe", "popup.dll", "DO_NOT_CLOSE.exe", "trust_me.bat", "hello.exe", "free_ipod.exe", "totally_safe.exe", "clippy.dll", "scoofyx.gif", "screensaver.scr", "wow.exe"];
@@ -402,7 +407,7 @@ function spawnMeme(key, x, y) {
   });
 }
 
-if (!REDUCED) {
+if (!REDUCED && !document.body.classList.contains('alphabet-page')) {
   // greet you a few seconds in - "i can see you looking"
   setTimeout(() => spawnMeme('watchTiger'), 4500);
   // random cursed popups forever (gentle, capped at 3)
@@ -437,6 +442,7 @@ console.log('%cnothing\'s hidden down here. i checked. no shit. - scoofy', 'colo
        audio in assets/sfx/ to override. Exposes window.playSfx(name).
    ============================================================ */
 (function sound() {
+  if (document.body.classList.contains('alphabet-page')) return;
   const KEY = 'scoofy_sound';
   const SFX = (window.GB_CONFIG && window.GB_CONFIG.sfx) || {};
   let enabled = localStorage.getItem(KEY) !== 'off'; // default ON
@@ -793,7 +799,16 @@ console.log('%cnothing\'s hidden down here. i checked. no shit. - scoofy', 'colo
 (function siteLogo() {
   const logo = document.getElementById('siteLogo');
   if (!logo) return;
+  let secretClicks = 0;
+  let secretReset;
   logo.addEventListener('click', () => {
+    secretClicks += 1;
+    clearTimeout(secretReset);
+    if (secretClicks >= 7) {
+      window.location.href = 'alphabet.html';
+      return;
+    }
+    secretReset = setTimeout(() => { secretClicks = 0; }, 2200);
     const r = logo.getBoundingClientRect();
     if (typeof boom === 'function') boom(r.left + r.width / 2, r.top + r.height / 2);
     try { logo.animate([{ scale: '1' }, { scale: '1.4' }, { scale: '1' }], { duration: 420, easing: 'ease-out' }); } catch (e) {}

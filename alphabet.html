@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A tiny secret corner of scoofy.xyz: a homemade alphabet." />
+  <title>the secret alphabet // scoofy.xyz</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="alphabet.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔤</text></svg>" />
+</head>
+<body class="alphabet-page">
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <div class="aero-aurora" aria-hidden="true"></div>
+  <div class="aero-grid" aria-hidden="true"></div>
+  <div class="curse-wash" aria-hidden="true"></div>
+  <div class="marquee top"><div class="marquee-run">✦ YOU FOUND THE SECRET PAGE ✦ &nbsp;•&nbsp; welcome to my extremely official alphabet archive &nbsp;•&nbsp; ✦ YOU FOUND THE SECRET PAGE ✦ &nbsp;•&nbsp;</div></div>
+
+  <main class="alphabet-wrap">
+    <a class="alphabet-home" href="index.html">← back to scoofy.xyz</a>
+    <header class="alphabet-header">
+      <p class="found-warning">YOU WEREN'T SUPPOSED TO FIND THIS</p>
+      <p class="alphabet-kicker">// reqwerty: reverse qwerty alphabet</p>
+      <h1>the <span>reqwerty</span> alphabet</h1>
+      <p class="stay-warning" id="stay-warning">you weren't supposed to find this... it gets weirder the longer you stay.</p>
+      <p>Type a normal letter, swap it for the character shown below, and your message is reqwerty.</p>
+      <div class="alphabet-stamp">scoof's alphabet<br />kbwwh'k laqflciy</div>
+    </header>
+
+    <section class="alphabet-section" aria-labelledby="letters-title">
+      <h2 id="letters-title">✦ the letter key ✦</h2>
+      <p class="alphabet-hint">Read each card as normal letter → reqwerty letter. Uppercase works the same way.</p>
+      <div class="letter-grid">
+        <article class="letter-card"><span class="latin">A</span><div class="glyph">l</div><b>A → L</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">B</span><div class="glyph">c</div><b>B → C</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">C</span><div class="glyph">b</div><b>C → B</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">D</span><div class="glyph">j</div><b>D → J</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">E</span><div class="glyph">i</div><b>E → I</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">F</span><div class="glyph">h</div><b>F → H</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">G</span><div class="glyph">v</div><b>G → V</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">H</span><div class="glyph">f</div><b>H → F</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">I</span><div class="glyph">e</div><b>I → E</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">J</span><div class="glyph">d</div><b>J → D</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">K</span><div class="glyph">s</div><b>K → S</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">L</span><div class="glyph">a</div><b>L → A</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">M</span><div class="glyph">z</div><b>M → Z</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">N</span><div class="glyph">x</div><b>N → X</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">O</span><div class="glyph">w</div><b>O → W</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">P</span><div class="glyph">q</div><b>P → Q</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">Q</span><div class="glyph">p</div><b>Q → P</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">R</span><div class="glyph">u</div><b>R → U</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">S</span><div class="glyph">k</div><b>S → K</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">T</span><div class="glyph">y</div><b>T → Y</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">U</span><div class="glyph">r</div><b>U → R</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">V</span><div class="glyph">g</div><b>V → G</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">W</span><div class="glyph">o</div><b>W → O</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">X</span><div class="glyph">n</div><b>X → N</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">Y</span><div class="glyph">t</div><b>Y → T</b><small>normal → reqwerty</small></article>
+        <article class="letter-card"><span class="latin">Z</span><div class="glyph">m</div><b>Z → M</b><small>normal → reqwerty</small></article>
+      </div>
+    </section>
+
+    <section class="meme-section translator" aria-labelledby="translator-title">
+      <h2 id="translator-title">✦ reqwerty translator ✦</h2>
+      <p>Type something and convert it using your alphabet. Spaces stay as spaces; underscores also work.</p>
+      <label for="translator-input">your text</label>
+      <textarea id="translator-input" rows="3" placeholder="type a message here..."></textarea>
+      <div class="translator-buttons">
+        <button type="button" id="encode-button">encode ↓</button>
+        <button type="button" id="decode-button">↑ decode</button>
+        <button type="button" id="copy-button">copy result</button>
+      </div>
+      <label for="translator-output">reqwerty result</label>
+      <textarea id="translator-output" rows="3" readonly placeholder="your translation shows up here..."></textarea>
+      <p class="translator-status" id="translator-status" aria-live="polite"></p>
+    </section>
+
+    <section class="meme-section cipher-notes">
+      <h2>✦ spaces, numbers &amp; an example ✦</h2>
+      <p>Spaces stay spaces. Numbers swap too, so the translator can do the whole message:</p>
+      <div class="number-grid" aria-label="number key">
+        <span>0 <b>↔</b> 1</span><span>1 <b>↔</b> 0</span>
+        <span>2 <b>↔</b> 9</span><span>3 <b>↔</b> 8</span>
+        <span>4 <b>↔</b> 7</span><span>5 <b>↔</b> 6</span>
+        <span>6 <b>↔</b> 5</span><span>7 <b>↔</b> 4</span>
+        <span>8 <b>↔</b> 3</span><span>9 <b>↔</b> 2</span>
+      </div>
+      <p class="cipher-example"><b>hello</b> → <code>fiaaw</code></p>
+      <p class="alphabet-hint">Example using the key: H → F, E → I, L → A, L → A, O → W.</p>
+    </section>
+
+    <section class="meme-section emoji-section">
+      <h2>✦ every emoji code ✦</h2>
+      <p>These are all the emoji shortcuts the site knows. Use the code in messages, bios, or anywhere text shows up.</p>
+      <div id="emoji-reference" class="emoji-sample-grid" aria-live="off"></div>
+    </section>
+
+    <section class="meme-section soundboard-section">
+      <h2>✦ sound junk drawer ✦</h2>
+      <p>tap a button to hear it. some of these came from the old Rbx folder.</p>
+      <div id="soundboard" class="soundboard-grid"></div>
+      <p id="soundboard-status" class="soundboard-status" aria-live="polite">pick a sound.</p>
+    </section>
+    <footer class="alphabet-footer">you found it. now you know too much. <a href="index.html">escape while you can ↗</a> · <a href="credits.html">credits</a></footer>
+  </main>
+  <div class="marquee bottom"><div class="marquee-run reverse">✦ END OF SECRET DOCUMENT ✦ &nbsp;•&nbsp; the alphabet is real and the memes are classified &nbsp;•&nbsp; ✦ END OF SECRET DOCUMENT ✦ &nbsp;•&nbsp;</div></div>
+  <script src="config.js"></script>
+  <script src="reqwerty.js"></script>
+  <script src="script.js"></script>
+  <script src="cursed.js"></script>
+</body>
+</html>

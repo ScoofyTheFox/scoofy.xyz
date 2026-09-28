@@ -619,6 +619,7 @@ details.drop[open] .drop-arrow { transform: rotate(180deg); }
 }
 .signoff-date { color: #fff; font-weight: bold; font-size: 1.05rem; margin-bottom: 12px; }
 .signoff-date b { color: #00ffff; }
+.signoff-update { color:#cbb9e0; font:12px var(--mono); margin:-5px 0 12px; }
 .signoff-list {
   list-style: none;
   text-align: left;
@@ -915,6 +916,8 @@ a.btn { text-decoration: none; }
 .gb-like .gb-heart { font-size: 1rem; transition: transform 0.15s; }
 .gb-like.liked { color: #ff0066; border-style: inset; background: #ffd6ea; }
 .gb-like.liked .gb-heart { transform: scale(1.25); }
+.gb-delete { display:inline-block; padding:4px 9px; border:2px outset #fff; background:#f3d4ff; color:#650050; font: bold .78rem var(--mono); cursor:pointer; }
+.gb-delete:hover { background:#ffb7d9; }
 .gb-empty {
   font-family: var(--mono);
   color: #00ffff;
