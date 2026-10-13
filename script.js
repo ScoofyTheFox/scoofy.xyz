@@ -1,6 +1,11 @@
 // scoofy.xyz :: STUPID MODE :: the js is 90% jokes
 'use strict';
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// firefox/gecko repaints some effects far more expensively than chromium and
+// lags because of it. detect it (true ONLY in firefox) so a couple of effects
+// can run lighter without changing anything on chromium/brave. pairs with the
+// @supports(-moz-appearance) block in styles.css.
+const GECKO = 'MozAppearance' in document.documentElement.style;
 let HITS = 1; // the fake visitor count (section 5)
 const TXT = (window.GB_CONFIG && window.GB_CONFIG.text) || {}; // editable copy, see config.js
 
@@ -34,7 +39,7 @@ const TXT = (window.GB_CONFIG && window.GB_CONFIG.text) || {}; // editable copy,
   let last = 0;
   addEventListener('pointermove', (e) => {
     const now = performance.now();
-    if (now - last < 45) return; // don't spawn a billion
+    if (now - last < (GECKO ? 100 : 45)) return; // firefox: spawn fewer (DOM churn is pricier there)
     last = now;
     const s = document.createElement('span');
     s.textContent = junk[Math.floor(Math.random() * junk.length)];

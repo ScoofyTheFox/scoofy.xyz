@@ -86,10 +86,10 @@ window.GB_CONFIG.text = {
   /* ========================= DROPDOWN: who even am i ========================= */
 
   dropWho: "who even am i :scoofy_pet:",
-  dropWhoIntro: 'HAIIIIII. I\'M <b>ScOoFyX</b> (he/him). i make things, i abandon things (A LOT:pensive:), it\'s a whole cycle.. :scoofy:',
+  dropWhoIntro: 'HAIIIIII. I\'M <b>ScOoFyX</b> (he/him) :scoofy:. some ppl call me <b>scoofy</b>, some just shorten it to <b>scoof</b>, it\'s all the same dumb fox. i make things, i abandon things (A LOT:pensive:), it\'s a whole cycle..',
   dropWhoBio: '<li><b>species:</b> fox-shark hybrid (mostly fox lmfao)</li><li><b>pronouns:</b> he/him :mlm: &nbsp;·&nbsp; <b>age:</b> 16</li><li><b>ma fur:</b> ultra violet its and some pinkish white :istg:</li><li><b>markings:</b> darker purple tiger stripes down the arms and legs, matching the tips of my BIGGG GIANT fox ears, plus a clean purple "X" on my back</li><li><b>hair:</b> a messy spiky purple tuft hair, inner ears flashing BRIGHTT HOT pink!</li><li><b>tail:</b> a shark tail in the same purple and white fluffy fluffer fur :blep:</li><li><b>extras:</b> round glasses with red and blue heterochromia eyes (i recently added glasses to my fursona cuz i have to wear glasses irl cuz of astigmatism & nearsightness :dies:)</li><li><b>Meaning of "X": it\'s deeper than it looks. I\'ve NEVER been able to lock in decisions (self-diagnosed hYpERaACtivE ADHD!!!:istg: makes me unable to commit to most things I want to do), so "X" became my escape, the <b>undecided variable</b>, the blank i never have to fill in. the x on my back has the same meaning.',
   dropWhoRefCap: "☝ the official ref sheet. click him to go big.",
-  dropWhoFoot: "so yeah. purple fox-shark. that's the guy. that's me.",
+  dropWhoFoot: "so yeah. purple fox-shark. scoofy, scoofyx, scoof, whatever you wanna call me. that's the guy. that's me.",
 
   /* ========================= DROPDOWN: site lore ========================= */
 

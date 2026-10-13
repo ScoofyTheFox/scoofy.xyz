@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scoofy's meowese · human to cat translator</title>
+  <meta name="description" content="scoofy's meowese :: a free human-to-cat text translator. type english, get fluent cat, then flip it to decode whatever your cat is yelling. part of scoofy.xyz." />
+  <link rel="canonical" href="https://scoofy.xyz/meowese.html" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#140022" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="scoofy.xyz" />
+  <meta property="og:url" content="https://scoofy.xyz/meowese.html" />
+  <meta property="og:title" content="scoofy's meowese · human to cat translator" />
+  <meta property="og:description" content="type english, get fluent cat. flip it to decode your cat. a free meowese translator from scoofy.xyz." />
+  <meta property="og:image" content="https://scoofy.xyz/assets/scoofy-embed.png" />
+  <meta property="og:image:width" content="1000" />
+  <meta property="og:image:height" content="1000" />
+  <meta property="og:image:alt" content="Scoofy the purple fox-shark, captioned dumb fox" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="scoofy's meowese · human to cat translator" />
+  <meta name="twitter:description" content="type english, get fluent cat. flip it to decode your cat." />
+  <meta name="twitter:image" content="https://scoofy.xyz/assets/scoofy-embed.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Scoofy's Meowese",
+    "alternateName": ["Meowese Translator", "Cat Translator", "Human to Cat Translator"],
+    "url": "https://scoofy.xyz/meowese.html",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any (web browser)",
+    "description": "A free human-to-cat text translator. Type English and get fluent cat cipher, or flip it to decode cat back into English. Two cipher modes.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "Scoofy", "url": "https://scoofy.xyz/" }
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/favicon.png" />
+  <style>
+    /* ==========================================================
+       TRANSLATOR PAGE  ::  win98-cursed, scoofy palette
+       all styling here is .ct-* scoped so it never fights styles.css
+       ========================================================== */
+    .ct-main {
+      position: relative; z-index: 1;
+      max-width: 880px; margin: 0 auto;
+      padding: 72px 16px 84px;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
+    .ct-head { font-size: clamp(2.2rem, 10vw, 4.4rem); }
+
+    /* the big win98 translator window */
+    .ct-card {
+      width: 100%;
+      background: #c0c0c0;
+      border: 4px outset #ffffff;
+      box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
+      text-align: left;
+      overflow: hidden;
+    }
+    .ct-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      background: linear-gradient(90deg, #000080, #1084d0);
+      color: #fff; font-family: "Tahoma", "MS Sans Serif", sans-serif;
+      font-weight: bold; font-size: 0.9rem;
+      padding: 4px 6px 4px 9px;
+    }
+    .ct-bar .ct-dots { display: flex; gap: 4px; }
+    .ct-bar .ct-dots span {
+      width: 17px; height: 15px; background: #c0c0c0; border: 2px outset #fff;
+      color: #000; font-size: 0.68rem; font-weight: bold; line-height: 11px;
+      text-align: center; display: inline-block;
+    }
+
+    /* feral / shortcut mode toggle */
+    .ct-modes {
+      display: flex; justify-content: center; gap: 0; padding: 12px;
+      background: repeating-linear-gradient(45deg, #b8b8b8, #b8b8b8 8px, #c0c0c0 8px, #c0c0c0 16px);
+      border-bottom: 2px groove #fff;
+    }
+    .ct-mode {
+      font-family: var(--mono); font-weight: bold; font-size: 0.82rem;
+      padding: 7px 16px; cursor: pointer; color: #000080;
+      background: #d9d9d9; border: 2px outset #ffffff;
+    }
+    .ct-mode:first-child { border-right-width: 1px; }
+    .ct-mode:last-child { border-left-width: 1px; }
+    .ct-mode.sel { background: #000080; color: #ffff00; border-style: inset; }
+    .ct-mode:not(.sel):hover { background: #e8e8e8; }
+
+    /* the two translation panels */
+    .ct-panels { display: flex; position: relative; }
+    .ct-panel { flex: 1 1 0; min-width: 0; padding: 14px; }
+    .ct-panel.left { background: #e7edff; border-right: 3px groove #fff; }
+    .ct-panel.right { background: #fff0e2; }
+    .ct-plabel {
+      display: flex; align-items: center; gap: 7px; margin-bottom: 8px;
+      font-family: "Tahoma", sans-serif; font-weight: bold; font-size: 0.95rem;
+    }
+    .ct-panel.left .ct-plabel { color: #000080; }
+    .ct-panel.right .ct-plabel { color: #a13b00; }
+    .ct-plabel .ct-ico { font-size: 1.35rem; line-height: 1; }
+
+    .ct-ta {
+      width: 100%; height: 230px; padding: 11px 12px;
+      font-size: 1.05rem; line-height: 1.45;
+      border: 2px inset #cfcfcf; background: #fff; color: #11002a;
+      resize: vertical; outline: none;
+      /* the site locks selection globally; a translator needs it back */
+      -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text;
+    }
+    .ct-panel.left  .ct-ta { font-family: var(--font); }
+    .ct-panel.right .ct-ta { font-family: var(--mono); font-weight: bold; color: #7a2b00; background: #fffaf4; }
+    .ct-ta:focus { border-color: #1084d0; box-shadow: 0 0 0 2px rgba(16, 132, 208, 0.35) inset; }
+    .ct-ta::placeholder { color: #9a8fb0; font-weight: normal; }
+
+    .ct-panel-foot {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      margin-top: 8px; min-height: 26px;
+    }
+    .ct-hint { font-family: var(--mono); font-size: 0.72rem; color: #4a4a6a; }
+    .ct-mini {
+      font-family: var(--mono); font-size: 0.72rem; font-weight: bold;
+      padding: 3px 9px; cursor: pointer; color: #650050;
+      background: #f3d4ff; border: 2px outset #fff;
+    }
+    .ct-mini:hover { background: #ffb7d9; }
+    .ct-mini:active { border-style: inset; }
+
+    .ct-copy {
+      font-family: var(--mono); font-size: 0.74rem; font-weight: bold;
+      padding: 4px 11px; cursor: pointer; color: #003300;
+      background: #8dff9f; border: 2px outset #c7ffcf;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .ct-copy:hover { background: #a9ffb8; }
+    .ct-copy:active { border-style: inset; }
+    .ct-copy svg { width: 14px; height: 14px; }
+
+    /* center swap button, pinned between the panels on desktop */
+    .ct-swap {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      z-index: 5; width: 46px; height: 46px; border-radius: 50%;
+      background: linear-gradient(#ff8ad9, #cc00cc); border: 4px solid #fff;
+      color: #fff; cursor: pointer; display: grid; place-items: center;
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+      transition: transform 0.25s ease, box-shadow 0.1s ease;
+    }
+    .ct-swap:hover { transform: translate(-50%, -50%) rotate(180deg); }
+    .ct-swap:active { box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4); }
+    .ct-swap svg { width: 22px; height: 22px; }
+
+    /* copy toast */
+    .ct-toast {
+      position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(10px);
+      z-index: 80; background: #000; color: #00ff88;
+      font-family: var(--mono); font-weight: bold; font-size: 0.85rem;
+      padding: 8px 16px; border: 2px solid #00ff88;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .ct-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* cheat sheet grid (lives inside a .drop accordion, reusing site styles) */
+    .ct-sheet { width: 100%; max-width: 620px; }
+    .ct-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+      gap: 6px;
+    }
+    .ct-grid[hidden] { display: none; }
+    .ct-cell {
+      font-family: var(--mono); font-size: 0.8rem; color: #000080;
+      background: #fff; border: 1px solid #b7b7d0; padding: 4px 7px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ct-cell b { color: #cc0000; }
+
+    @media (max-width: 620px) {
+      .ct-panels { flex-direction: column; }
+      .ct-panel.left { border-right: 0; border-bottom: 3px groove #fff; }
+      .ct-swap { transform: translate(-50%, -50%) rotate(90deg); }
+      .ct-swap:hover { transform: translate(-50%, -50%) rotate(270deg); }
+      .ct-ta { height: 170px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- screen-reader + search-engine intro: real descriptive sentences, not stuffing -->
+  <p class="sr-only">Scoofy's Meowese is a free human-to-cat text translator, also called a meowese translator or cat translator. Type English and get a fluent cat cipher, or flip it to decode cat back into English. Two cipher modes, made by Scoofy (scoofyx) on scoofy.xyz.</p>
+
+  <!-- confetti / cursor-trail canvas (boom() draws here) -->
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <!-- scrolling nonsense, top -->
+  <div class="marquee top">
+    <div class="marquee-run">
+      🐱 OFFICIAL HUMAN-TO-CAT TRANSLATOR 🐱 &nbsp;•&nbsp; results 0% guaranteed to be real cat &nbsp;•&nbsp; your cat will not understand this &nbsp;•&nbsp; neither will you &nbsp;•&nbsp; 🐱 OFFICIAL HUMAN-TO-CAT TRANSLATOR 🐱 &nbsp;•&nbsp; results 0% guaranteed to be real cat &nbsp;•&nbsp; your cat will not understand this &nbsp;•&nbsp; neither will you &nbsp;•&nbsp;
+    </div>
+  </div>
+
+  <main class="ct-main">
+    <a class="gb-back" href="index.html">« back to the shithole</a>
+
+    <div class="site-logo" id="siteLogo" role="button">scoofy.xyz</div>
+    <p class="kicker" id="kicker">// human detected. translating to feline.</p>
+
+    <h1 class="headline wordart">
+      SCOOFY'S<br />MEOWESE
+    </h1>
+
+    <div class="badges">
+      <span class="badge blink">MEOW!</span>
+      <span class="badge">100% FERAL</span>
+      <span class="badge blink">NO REFUNDS</span>
+    </div>
+
+    <p class="sub">
+      type like a human, get back fluent <em>cat</em>. flip it around to
+      decode whatever the hell your cat has been yelling at you.
+    </p>
+
+    <!-- ===================== the translator window ===================== -->
+    <div class="ct-card">
+      <div class="ct-bar">
+        <span>🐾 meowese.exe</span>
+        <span class="ct-dots"><span>_</span><span>□</span><span>×</span></span>
+      </div>
+
+      <div class="ct-modes" role="group" aria-label="cipher mode">
+        <button type="button" class="ct-mode sel" id="modeFeral">😼 feral (realistic)</button>
+        <button type="button" class="ct-mode" id="modeShort">😺 shortcut (lazy)</button>
+      </div>
+
+      <div class="ct-panels">
+        <!-- INPUT -->
+        <div class="ct-panel left" id="panelLeft">
+          <div class="ct-plabel"><span class="ct-ico" id="leftIco">👤</span><span id="leftLabel">human (english)</span></div>
+          <textarea id="ctInput" class="ct-ta" spellcheck="false" autocomplete="off"
+            placeholder="type your message here... e.g. feed me right now"></textarea>
+          <div class="ct-panel-foot">
+            <span class="ct-hint">translates live as you type</span>
+            <button type="button" class="ct-mini" id="ctClear">clear it</button>
+          </div>
+        </div>
+
+        <!-- swap -->
+        <button type="button" class="ct-swap" id="ctSwap" title="swap directions" aria-label="swap directions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 9H3l5-5"/><path d="M3 15h18l-5 5"/></svg>
+        </button>
+
+        <!-- OUTPUT -->
+        <div class="ct-panel right" id="panelRight">
+          <div class="ct-plabel">
+            <span class="ct-ico" id="rightIco">🐱</span><span id="rightLabel">cat (cipher)</span>
+          </div>
+          <textarea id="ctOutput" class="ct-ta" readonly spellcheck="false"
+            placeholder="mrow mrow mrow..."></textarea>
+          <div class="ct-panel-foot">
+            <span class="ct-hint" id="ctCount">0 chars</span>
+            <button type="button" class="ct-copy" id="ctCopy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              copy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== cheat sheet accordion ===================== -->
+    <div class="ct-sheet">
+      <details class="drop">
+        <summary>
+          <span class="drop-ico">📖</span>
+          <span class="drop-txt">the cipher cheat sheet <span class="tag-archived" id="dictLabel">FERAL</span></span>
+          <span class="drop-arrow">▼</span>
+        </summary>
+        <div class="drop-body">
+          <p>every letter + number maps to one cat noise. same map does the decoding.</p>
+          <div class="ct-grid" id="gridFeral"></div>
+          <div class="ct-grid" id="gridShort" hidden></div>
+          <p class="drop-foot">pro tip: single space between letters, double space between words. the decoder counts on it.</p>
+        </div>
+      </details>
+    </div>
+
+    <p class="tiny" style="text-align:center; margin:8px"><a href="index.html">home</a> &nbsp;·&nbsp; <a href="guestbook.html">guestbook</a> &nbsp;·&nbsp; <a href="credits.html">credits</a></p>
+  </main>
+
+  <!-- scrolling nonsense, bottom -->
+  <div class="marquee bottom">
+    <div class="marquee-run reverse">
+      👽 the cat does not care what you typed 👽 &nbsp;•&nbsp; purrr. prrt. mrow. this is science now &nbsp;•&nbsp; built at 3am obviously &nbsp;•&nbsp; 👽 the cat does not care what you typed 👽 &nbsp;•&nbsp; purrr. prrt. mrow. this is science now &nbsp;•&nbsp; built at 3am obviously &nbsp;•&nbsp;
+    </div>
+  </div>
+
+  <div class="ct-toast" id="ctToast">copied. go yell it at a cat 🐾</div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+  <script>
+  /* ============================================================
+     SCOOFY'S MEOWESE :: translator logic (loads AFTER script.js, so it
+     can borrow boom(), spawnMeme() and window.playSfx by name).
+     built for speed: array-join (no string growth), one rAF-
+     coalesced update per frame, cheat grids rendered ONCE.
+     ============================================================ */
+  (function catTranslator() {
+    'use strict';
+
+    // ---- the two ciphers (append-only if you ever edit) ----
+    const FERAL = {
+      A:'Mrow', B:'Prrt', C:'Kkkk', D:'Yeowll', E:'Mew',
+      F:'Ffftt', G:'Raoww', H:'Hssss', I:'Rrrp', J:'Yaaowl',
+      K:'Keck', L:'Brrrup', M:'Nya', N:'Moww', O:'Owwwll',
+      P:'Purrrr', Q:'Chchch', R:'Mrrrr', S:'Ssst', T:'Trrrow',
+      U:'Urrgh', V:'Vrrrt', W:'Waow', X:'Kch', Y:'Yaaaa', Z:'Zzzzt',
+      0:'Mph', 1:'Bap', 2:'Bapbap', 3:'Scratch', 4:'Thump',
+      5:'Crunch', 6:'Slurp', 7:'Sniff', 8:'Hckhck', 9:'Sigh'
+    };
+    const SHORT = {
+      A:'Miau', B:'Mew', C:'Chirp', D:'Mow', E:'Meow',
+      F:'Hiss', G:'Maw', H:'Meaw', I:'Meau', J:'Mrrrp',
+      K:'Keck', L:'Blep', M:'Mrow', N:'Yowl', O:'Meou',
+      P:'Purrr', Q:'Chitter', R:'Raow', S:'Spt', T:'Trill',
+      U:'Urrr', V:'Vrow', W:'Wow', X:'Xsss', Y:'Yeow', Z:'Zzz',
+      0:'Boop', 1:'Pfft', 2:'Ekek', 3:'Brrr', 4:'Bap',
+      5:'Mep', 6:'Waaa', 7:'Prrow', 8:'Scritch', 9:'Yip'
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const input  = $('ctInput'),  output = $('ctOutput');
+    const swap   = $('ctSwap'),   copy   = $('ctCopy'),   clear = $('ctClear');
+    const toast  = $('ctToast'),  count  = $('ctCount');
+    const leftLabel = $('leftLabel'), rightLabel = $('rightLabel');
+    const leftIco   = $('leftIco'),   rightIco   = $('rightIco');
+    const panelLeft = $('panelLeft'), panelRight = $('panelRight');
+    const modeFeral = $('modeFeral'), modeShort  = $('modeShort');
+    const dictLabel = $('dictLabel');
+    const gridFeral = $('gridFeral'), gridShort = $('gridShort');
+    if (!input || !output) return;
+
+    let dict = FERAL;          // active cipher
+    let reverse = {};          // cat token -> letter, rebuilt per mode
+    let toCat = true;          // direction: true = english->cat
+
+    function buildReverse() {
+      reverse = Object.create(null);
+      for (const k in dict) reverse[dict[k].toLowerCase()] = k;
+    }
+
+    // --- english -> cat. push tokens into an array, join once (fast) ---
+    function encode(text) {
+      const out = [];
+      const n = text.length;
+      for (let i = 0; i < n; i++) {
+        const ch = text[i];
+        const tok = dict[ch === ' ' ? '' : ch.toUpperCase()];
+        if (tok) {
+          out.push(tok);
+          const nx = text[i + 1];
+          if (nx !== undefined && nx !== ' ' && dict[nx.toUpperCase()]) out.push(' ');
+        } else if (ch === ' ') {
+          out.push('  '); // double space = word break
+        } else {
+          out.push(ch);   // punctuation / unknown, kept as-is
+          const nx = text[i + 1];
+          if (nx !== undefined && nx !== ' ' && dict[nx.toUpperCase()]) out.push(' ');
+        }
+      }
+      return out.join('');
+    }
+
+    // --- cat -> english. split on the space scheme, map each token back ---
+    const PART = /(  | )/;
+    const CORE = /^([^a-zA-Z]*)([a-zA-Z]+)([^a-zA-Z]*)$/;
+    function decode(text) {
+      const parts = text.split(PART);
+      const out = [];
+      let first = true; // first letter of a word -> keep uppercase
+      for (let i = 0; i < parts.length; i++) {
+        const p = parts[i];
+        if (p === ' ') continue;          // single space = letter gap, drop it
+        if (p === '  ') { out.push(' '); first = true; continue; } // word gap
+        const m = CORE.exec(p);
+        if (m) {
+          const hit = reverse[m[2].toLowerCase()];
+          if (hit !== undefined) {
+            out.push(m[1] + (first ? hit : hit.toLowerCase()) + m[3]);
+            first = false;
+            continue;
+          }
+        }
+        out.push(p); // unrecognized, leave it
+      }
+      return out.join('');
+    }
+
+    function translate() {
+      const src = input.value;
+      const res = toCat ? encode(src) : decode(src);
+      output.value = res;
+      count.textContent = res.length + (res.length === 1 ? ' char' : ' chars');
+    }
+
+    // coalesce bursts of input into one translate per animation frame
+    let queued = false;
+    function schedule() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; translate(); });
+    }
+
+    // --- cheat sheet: render each grid exactly once, then just show/hide ---
+    function fillGrid(el, d) {
+      const html = [];
+      for (const k in d) html.push('<div class="ct-cell"><b>' + k + '</b> ' + d[k] + '</div>');
+      el.innerHTML = html.join('');
+    }
+    fillGrid(gridFeral, FERAL);
+    fillGrid(gridShort, SHORT);
+
+    // --- mode switch (feral / shortcut) ---
+    function setMode(feral) {
+      dict = feral ? FERAL : SHORT;
+      buildReverse();
+      modeFeral.classList.toggle('sel', feral);
+      modeShort.classList.toggle('sel', !feral);
+      gridFeral.hidden = !feral;
+      gridShort.hidden = feral;
+      dictLabel.textContent = feral ? 'FERAL' : 'SHORTCUT';
+      translate();
+    }
+
+    // --- direction swap (english<->cat) ---
+    function flip() {
+      toCat = !toCat;
+      input.value = output.value; // the old output becomes the new input
+      if (toCat) {
+        leftLabel.textContent = 'human (english)'; rightLabel.textContent = 'cat (cipher)';
+        leftIco.textContent = '👤'; rightIco.textContent = '🐱';
+        input.placeholder = 'type your message here... e.g. feed me right now';
+        output.placeholder = 'mrow mrow mrow...';
+      } else {
+        leftLabel.textContent = 'cat (cipher)'; rightLabel.textContent = 'human (english)';
+        leftIco.textContent = '🐱'; rightIco.textContent = '👤';
+        input.placeholder = 'paste cat here... e.g. Ffftt Mew Mew Yeowll  Nya Mew';
+        output.placeholder = 'the human translation shows up here...';
+      }
+      // swap the panel tints too (blue = human side, orange = cat side)
+      panelLeft.style.background  = toCat ? '#e7edff' : '#fff0e2';
+      panelRight.style.background = toCat ? '#fff0e2' : '#e7edff';
+      translate();
+      input.focus();
+    }
+
+    // --- copy, with confetti + sound payoff borrowed from script.js ---
+    function showToast() {
+      toast.classList.add('show');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+    function payoff() {
+      const r = copy.getBoundingClientRect();
+      if (typeof boom === 'function') boom(r.left + r.width / 2, r.top + r.height / 2);
+      if (typeof window.playSfx === 'function') window.playSfx('sign');
+      if (typeof spawnMeme === 'function' && Math.random() < 0.45) spawnMeme();
+    }
+    function doCopy() {
+      const val = output.value;
+      if (!val) return;
+      const ok = () => { showToast(); payoff(); };
+      const legacy = () => {
+        try {
+          output.focus(); output.select(); output.setSelectionRange(0, 999999);
+          document.execCommand('copy');
+          const s = window.getSelection(); if (s) s.removeAllRanges();
+          ok();
+        } catch (e) { /* clipboard blocked, oh well */ }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(val).then(ok).catch(legacy);
+      } else legacy();
+    }
+
+    // the global lockdown kills text-selection + right-click everywhere;
+    // stop those two events inside the fields so the translator is usable
+    ['selectstart', 'contextmenu'].forEach((ev) => {
+      input.addEventListener(ev, (e) => e.stopPropagation());
+      output.addEventListener(ev, (e) => e.stopPropagation());
+    });
+
+    input.addEventListener('input', schedule);
+    swap.addEventListener('click', flip);
+    copy.addEventListener('click', doCopy);
+    clear.addEventListener('click', () => { input.value = ''; translate(); input.focus(); });
+    modeFeral.addEventListener('click', () => setMode(true));
+    modeShort.addEventListener('click', () => setMode(false));
+
+    buildReverse();
+    translate();
+  })();
+  </script>
+</body>
+</html>

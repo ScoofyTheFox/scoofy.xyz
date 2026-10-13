@@ -1009,3 +1009,48 @@ a.btn { text-decoration: none; }
   * { animation: none !important; }
   .blink { visibility: visible !important; }
 }
+
+/* ============================================================
+   GECKO (firefox) PERF PASS
+   firefox repaints animated gradients and animated filter/drop-shadow
+   far more expensively than chromium, so the site's three forever-running
+   full-screen repaints (drifting bg, wobbling wordart, rainbow+glow logo)
+   make gecko lag while blink stays smooth. for FIREFOX ONLY we freeze those
+   repaints and keep the cheap composited transforms. the gate below,
+   @supports(-moz-appearance), is true only in firefox: chromium/brave skips
+   this whole block and renders exactly as before. (the cursor-trail throttle
+   lives in script.js behind the matching 'MozAppearance' check.)
+   ============================================================ */
+@supports (-moz-appearance: none) {
+  /* stop repainting the entire viewport every frame: park the drift */
+  body { animation: none; background-position: 0 0, 50% 50%; }
+  /* the wobble re-rasterizes stroked+clipped+double-shadow text each frame.
+     freeze it; the static gradient, stroke and drop-shadow all stay. */
+  .wordart { animation: none; }
+  /* the logo's rainbow (background-position) + glow (filter) are the pricey
+     loops. keep only the cheap composited jitter, with a static glow. */
+  .site-logo {
+    animation: sl-jitter 1.2s ease-in-out infinite;
+    background-position: center;
+    filter: drop-shadow(0 0 8px rgba(180, 90, 255, 0.6));
+  }
+  /* keep the marquees on their own compositor layer so scrolling stays smooth */
+  .marquee-run { will-change: transform; }
+}
+
+/* ============================================================
+   SR-ONLY  ::  visually hidden, still read by screen readers AND
+   search crawlers. used for a real descriptive intro that names the
+   brand aliases (scoofy / scoofyx / scoof / meowese) in plain english.
+   this is the accessible 'clip' pattern, NOT display:none (which google
+   discounts) and NOT keyword stuffing (which google penalises).
+   ============================================================ */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
